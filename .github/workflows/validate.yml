@@ -1,4 +1,4 @@
-name: Validate skill and plugin
+name: Validate full skill plugin and optional app
 
 on:
   push:
@@ -32,19 +32,63 @@ jobs:
       - name: Install Agent Skills reference validator
         run: pip install skills-ref==0.1.1
 
-      - name: Agent Skills specification validation
+      - name: Validate root skill and bundled full skill
         run: |
           python - <<'PY'
           from pathlib import Path
           from skills_ref import validate
-          root = Path.cwd().resolve()
-          problems = validate(root)
-          if problems:
-              print("Agent Skills validation failed:")
-              for problem in problems:
-                  print(f"- {problem}")
-              raise SystemExit(1)
-          print("Agent Skills validation passed.")
+
+          for root in [Path.cwd().resolve(), Path('plugin/skills/system-design-architect').resolve()]:
+              problems = validate(root)
+              if problems:
+                  print(f"Agent Skills validation failed for {root}:")
+                  for problem in problems:
+                      print(f"- {problem}")
+                  raise SystemExit(1)
+              print(f"Agent Skills validation passed for {root}.")
+          PY
+
+      - name: Validate plugin bundle completeness
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import filecmp
+          import json
+
+          bundle = Path('plugin/skills/system-design-architect')
+          required_dirs = ['references', 'templates', 'model', 'examples', 'evals', 'scripts']
+          required_files = [
+              'SKILL.md', 'LICENSE', 'CHANGELOG.md',
+              'references/visual-first.md', 'references/daily-use.md',
+              'references/build-layer.md', 'references/canonical-model.md',
+              'references/adaptive-systems.md', 'references/review-matrix.md',
+              'templates/SYSTEM_VIEW_PACK.md', 'templates/SYSTEM_HEALTH.md',
+              'templates/ADAPTIVE_OPERATING_LOOP.md',
+              'model/system.schema.json', 'model/system.example.json',
+              'scripts/render_system.py', 'scripts/validate_model.py',
+              'examples/non-software-employee-onboarding-system.md',
+              'evals/evals.json', 'evals/visual-daily-evals.json',
+          ]
+          for d in required_dirs:
+              if not (bundle / d).is_dir():
+                  raise SystemExit(f'missing bundled directory: {d}')
+          for rel in required_files:
+              if not (bundle / rel).is_file():
+                  raise SystemExit(f'missing bundled file: {rel}')
+
+          if (Path('plugin') / '.mcp.json').exists() or (Path('plugin') / 'package.json').exists():
+              raise SystemExit('core plugin must remain skill-only and must not require MCP/Node')
+
+          manifest = json.loads(Path('plugin/.codex-plugin/plugin.json').read_text())
+          if 'mcpServers' in manifest:
+              raise SystemExit('core plugin manifest must not declare MCP servers')
+          if manifest.get('skills') != './skills/':
+              raise SystemExit('plugin manifest must point to bundled skills')
+
+          if not filecmp.cmp('SKILL.md', bundle / 'SKILL.md', shallow=False):
+              raise SystemExit('bundled SKILL.md has drifted from root SKILL.md')
+
+          print('Full skill plugin bundle is complete and MCP-independent.')
           PY
 
       - name: Validate JSON artifacts
@@ -52,29 +96,29 @@ jobs:
           python -m json.tool evals/evals.json >/dev/null
           python -m json.tool evals/visual-daily-evals.json >/dev/null
           python -m json.tool plugin/.codex-plugin/plugin.json >/dev/null
-          python -m json.tool plugin/.mcp.json >/dev/null
-          python -m json.tool plugin/package.json >/dev/null
+          python -m json.tool app/.mcp.json >/dev/null
+          python -m json.tool app/package.json >/dev/null
 
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'npm'
-          cache-dependency-path: plugin/package.json
+          cache-dependency-path: app/package.json
 
-      - name: Install plugin dependencies
-        working-directory: plugin
+      - name: Install optional app dependencies
+        working-directory: app
         run: npm install --no-audit --no-fund
 
-      - name: Type-check plugin server
-        working-directory: plugin
+      - name: Type-check optional app server
+        working-directory: app
         run: npm run check
 
-      - name: Build plugin server and React widget
-        working-directory: plugin
+      - name: Build optional MCP server and React widget
+        working-directory: app
         run: npm run build
 
-      - name: Verify plugin build artifacts
+      - name: Verify optional app build artifacts
         run: |
-          test -s plugin/web/dist/component.js
-          test -s plugin/server/dist/server.js
-          grep -q "System Design Architect" plugin/web/dist/component.js
+          test -s app/web/dist/component.js
+          test -s app/server/dist/server.js
+          grep -q "System Design Architect" app/web/dist/component.js
