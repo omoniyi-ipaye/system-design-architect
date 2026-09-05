@@ -97,3 +97,14 @@ Multi-agent systems add:
 - higher latency/cost
 - harder debugging/evals
 - broader security surface
+
+## 9. Autonomy budget and control plane
+For each agent capability define:
+- what the model may decide without approval
+- maximum side-effect scope
+- tool/data capabilities exposed
+- policy enforced outside the model
+- actions requiring approval
+- expiry/revocation of delegated authority
+
+Separate untrusted **data-plane** context from the trusted **control plane** containing system policy, credentials, tool capabilities, and approval rules.
