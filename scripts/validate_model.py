@@ -3,9 +3,9 @@
 from pathlib import Path
 import argparse
 import json
-import sys
 
-STAGES = {"as_is", "transition", "target"}
+VIEW_STAGES = {"as_is", "transition", "target"}
+ELEMENT_STAGES = VIEW_STAGES | {"shared"}
 EVIDENCE = {"observed", "assumed", "proposed", "unknown"}
 FLOW_TYPES = {"work", "information", "authority", "state", "money", "material", "resource", "feedback", "dependency"}
 LEVELS = {"L0", "L1", "L2", "L3"}
@@ -21,18 +21,20 @@ def validate(model: dict) -> list[str]:
     for key in ("id", "name", "purpose", "stage"):
         if not system.get(key):
             errors.append(f"system.{key} is required")
-    if system.get("stage") not in STAGES | {"mixed"}:
+    if system.get("stage") not in VIEW_STAGES | {"mixed"}:
         errors.append(f"invalid system.stage: {system.get('stage')}")
 
     elements = model.get("elements", [])
     ids = []
+    element_by_id = {}
     for i, e in enumerate(elements):
         eid = e.get("id")
         if not eid:
             errors.append(f"elements[{i}].id is required")
             continue
         ids.append(eid)
-        if e.get("stage") not in STAGES:
+        element_by_id[eid] = e
+        if e.get("stage") not in ELEMENT_STAGES:
             errors.append(f"element {eid}: invalid stage {e.get('stage')}")
         if e.get("evidence") not in EVIDENCE:
             errors.append(f"element {eid}: invalid evidence {e.get('evidence')}")
@@ -50,23 +52,26 @@ def validate(model: dict) -> list[str]:
             errors.append(f"flow {fid}: unknown from element {f.get('from')}")
         if f.get("to") not in idset:
             errors.append(f"flow {fid}: unknown to element {f.get('to')}")
-        if f.get("stage") not in STAGES:
+        if f.get("stage") not in ELEMENT_STAGES:
             errors.append(f"flow {fid}: invalid stage {f.get('stage')}")
         if f.get("evidence") not in EVIDENCE:
             errors.append(f"flow {fid}: invalid evidence {f.get('evidence')}")
         if f.get("type") not in FLOW_TYPES:
             errors.append(f"flow {fid}: invalid type {f.get('type')}")
-        # Avoid silent AS-IS/TARGET contamination when both endpoints are modeled in one stage.
-        src = next((e for e in elements if e.get("id") == f.get("from")), None)
-        dst = next((e for e in elements if e.get("id") == f.get("to")), None)
-        if src and dst and src.get("stage") == dst.get("stage") and f.get("stage") != src.get("stage"):
-            errors.append(f"flow {fid}: stage differs from both endpoint stages")
+
+        src = element_by_id.get(f.get("from"))
+        dst = element_by_id.get(f.get("to"))
+        # A flow can reference shared elements, but a stage-specific flow should not silently connect
+        # two elements that both belong exclusively to a different stage.
+        if src and dst and src.get("stage") == dst.get("stage") and src.get("stage") in VIEW_STAGES:
+            if f.get("stage") != src.get("stage"):
+                errors.append(f"flow {fid}: stage differs from both endpoint stages")
     if len(flow_ids) != len(set(flow_ids)):
         errors.append("flow IDs must be unique")
 
     for r in model.get("risks", []):
         rid = r.get("id", "<risk>")
-        if r.get("stage") not in STAGES:
+        if r.get("stage") not in ELEMENT_STAGES:
             errors.append(f"risk {rid}: invalid stage")
         for target in r.get("affects", []):
             if target not in idset:
@@ -95,7 +100,7 @@ def validate(model: dict) -> list[str]:
 
     for t in model.get("transitions", []):
         tid = t.get("id", "<transition>")
-        if t.get("from") not in STAGES or t.get("to") not in STAGES:
+        if t.get("from") not in VIEW_STAGES or t.get("to") not in VIEW_STAGES:
             errors.append(f"transition {tid}: invalid from/to stage")
         if not t.get("change"):
             errors.append(f"transition {tid}: change is required")
