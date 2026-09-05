@@ -22,7 +22,7 @@ jobs:
           test -s /tmp/system-views.html
           grep -q "AS-IS" /tmp/system-views.html
           grep -q "TARGET" /tmp/system-views.html
-          grep -q "Health & adaptive loop" /tmp/system-views.html
+          grep -q "Adaptive loop" /tmp/system-views.html
       - name: Install Agent Skills reference validator
         run: pip install skills-ref==0.1.1
       - name: Agent Skills specification validation
