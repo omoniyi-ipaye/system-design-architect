@@ -9,6 +9,7 @@ ELEMENT_STAGES = VIEW_STAGES | {"shared"}
 EVIDENCE = {"observed", "assumed", "proposed", "unknown"}
 FLOW_TYPES = {"work", "information", "authority", "state", "money", "material", "resource", "feedback", "dependency"}
 LEVELS = {"L0", "L1", "L2", "L3"}
+AUTOMATION = {"manual", "deterministic", "ai_assisted", "bounded_autonomous"}
 
 
 def validate(model: dict) -> list[str]:
@@ -58,16 +59,37 @@ def validate(model: dict) -> list[str]:
             errors.append(f"flow {fid}: invalid evidence {f.get('evidence')}")
         if f.get("type") not in FLOW_TYPES:
             errors.append(f"flow {fid}: invalid type {f.get('type')}")
-
         src = element_by_id.get(f.get("from"))
         dst = element_by_id.get(f.get("to"))
-        # A flow can reference shared elements, but a stage-specific flow should not silently connect
-        # two elements that both belong exclusively to a different stage.
         if src and dst and src.get("stage") == dst.get("stage") and src.get("stage") in VIEW_STAGES:
             if f.get("stage") != src.get("stage"):
                 errors.append(f"flow {fid}: stage differs from both endpoint stages")
     if len(flow_ids) != len(set(flow_ids)):
         errors.append("flow IDs must be unique")
+
+    step_ids = []
+    required_step_fields = (
+        "id", "name", "stage", "purpose", "trigger", "owner", "executor", "action",
+        "state_before", "state_after", "outputs", "completion_evidence", "automation"
+    )
+    for i, step in enumerate(model.get("process_steps", [])):
+        sid = step.get("id") or f"process_steps[{i}]"
+        step_ids.append(sid)
+        for key in required_step_fields:
+            if key not in step or step.get(key) in (None, "", []):
+                errors.append(f"process step {sid}: {key} is required")
+        if step.get("stage") not in ELEMENT_STAGES:
+            errors.append(f"process step {sid}: invalid stage {step.get('stage')}")
+        if step.get("automation") not in AUTOMATION:
+            errors.append(f"process step {sid}: invalid automation {step.get('automation')}")
+        if step.get("automation") == "bounded_autonomous":
+            for key in ("control", "completion_evidence", "recovery", "audit_evidence", "verification"):
+                if not step.get(key):
+                    errors.append(f"process step {sid}: bounded autonomous step requires {key}")
+        if step.get("exceptions") and not step.get("exception_route"):
+            errors.append(f"process step {sid}: exceptions require exception_route")
+    if len(step_ids) != len(set(step_ids)):
+        errors.append("process-step IDs must be unique")
 
     for r in model.get("risks", []):
         rid = r.get("id", "<risk>")
