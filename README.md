@@ -1,109 +1,189 @@
 # System Design Architect
 
-A vendor-neutral **Agent Skill** that forces good system design *before coding* and helps existing systems evolve toward stronger architecture without reflexive rewrites.
+A vendor-neutral **Agent Skill** for designing, reviewing, explaining, and evolving complex systems before implementation or change.
 
-It is designed for:
-- new software/product ideas
-- existing architecture reviews
-- AI and agent systems
-- APIs and integrations
-- workflow/automation systems
-- distributed systems
-- sensitive business systems
+It began as a software-architecture skill. From v1.2 it is intentionally broader: a **system** can be software, an AI agent, a business process, an operating model, a service, a smart environment, a supply chain, a learning system, or another network of interacting parts organized around an outcome.
+
+## What makes it different
+
+System Design Architect combines three independent choices:
+
+### Lifecycle mode
+- **New System Design** — start from an idea or desired outcome.
+- **Existing System Review** — reconstruct the as-is system from evidence before recommending change.
+- **Change Design** — understand the relevant current system before adding a new capability.
+
+### Domain lens
+- **Software / digital** — services, APIs, data, identity, infrastructure, reliability, deployment.
+- **General systems** — actors, handoffs, resources, decision rights, capacity, controls, feedback, resilience, outcomes.
+
+### Presentation mode
+- **Architect Mode** — produce the design/review efficiently.
+- **Teaching Mode** — progressively unfold a system graph so the learner understands why every major part exists.
+
+## Teaching Mode
+
+Instead of showing a dense final diagram first, Teaching Mode unfolds the system in stages:
+
+```text
+Purpose / outcome
+      ↓
+Actors / stakeholders
+      ↓
+Boundary / environment
+      ↓
+Inputs, resources, outputs
+      ↓
+Core flow
+      ↓
+Rules / decisions
+      ↓
+Dependencies / interfaces
+      ↓
+Failure modes / constraints
+      ↓
+Feedback / measurement
+      ↓
+Options / trade-offs
+      ↓
+Target system
+      ↓
+Transition / implementation
+```
+
+At each stage the skill preserves the previous graph, adds only the new layer, explains **why it matters**, gives an example, identifies a common failure, and connects the stage to the next design question.
+
+For existing systems, it unfolds the **as-is graph first**, then the findings, then the **target graph**. Observed and proposed state are never silently mixed.
+
+See [`references/teaching-mode.md`](references/teaching-mode.md).
+
+## Beyond software
+
+The same systems discipline applies across many fields when the vocabulary is adapted correctly.
+
+Examples:
+- employee onboarding and People Operations
+- organizational operating models
+- customer-service operations
+- restaurant or hospitality service flow
+- logistics and supply chains
+- smart-home / building systems
+- manufacturing or physical operations
+- learning and education systems
+- finance or approval processes
+- public/service-delivery workflows
+
+The skill does **not** force APIs, databases, microservices, or software security concepts onto these problems. It translates them into the domain's real building blocks: roles, capabilities, handoffs, records/resources, queues, decision rights, controls, capacity, failure recovery, measurement, and feedback loops.
+
+See [`references/domain-neutral-systems.md`](references/domain-neutral-systems.md).
 
 ## Why this exists
 
-AI coding tools make it extremely easy to move from idea to implementation before the problem, trust boundaries, data ownership, failure semantics, or operational model are understood.
+AI tools make it extremely easy to jump from an idea to a solution before the purpose, system boundary, ownership, failure modes, feedback loops, trust/control boundaries, or trade-offs are understood.
 
-System Design Architect inserts an architecture discipline between **idea** and **build**:
+System Design Architect inserts disciplined reasoning between **idea/current system** and **implementation/change**:
 
 ```text
 Idea / Existing System
         ↓
-Requirements + Constraints
+Purpose + Boundary
         ↓
-Risk + Data + Domain
+Actors + Requirements
         ↓
-Architecture Options
+State / Resources + Flows
         ↓
-Security + Reliability + AI Gates
+Dependencies + Risks
         ↓
-Trade-offs + ADRs
+Options + System Views
         ↓
-Implementation / Migration Slices
+Controls + Resilience
         ↓
-Build
+Feedback + Measurement
+        ↓
+Decisions + Fitness Checks
+        ↓
+Implementation / Transition
 ```
 
-The skill is intentionally opinionated about **simplicity**. It challenges unnecessary microservices, queues, event buses, vector databases, multi-agent systems, and other infrastructure when the requirements do not justify them.
+The skill is intentionally opinionated about **simplicity**. It challenges unnecessary infrastructure, automation, handoffs, approvals, agents, process ceremony, and organizational complexity when the requirements do not justify them.
 
-## Methodology
+## Core principles
 
-The skill synthesizes four complementary bodies of practice:
+- Start with the outcome, not the technology or fashionable framework.
+- Distinguish **Observed / Assumed / Proposed**.
+- Establish the system boundary.
+- Make ownership and decision rights explicit.
+- Map flows, handoffs, state/resources, dependencies, and exception paths.
+- Treat dependencies as fallible.
+- Design controls and recovery, not only the happy path.
+- Examine capacity, bottlenecks, and failure propagation.
+- Make feedback loops and measures explicit.
+- Prefer reversible, evolutionary change.
+- Record significant decisions and trade-offs.
+- Test important architectural/system claims with fitness checks.
+- For AI: models can interpret and propose; deterministic controls must enforce critical permissions and side effects.
 
-1. **Well-Architected quality lenses** — operational excellence, security, reliability, performance, cost, sustainability.
-2. **C4-style architecture communication** — context, container, component, dynamic, and deployment views only when useful.
-3. **Architecture Decision Records (ADRs)** — explicit decisions, alternatives, consequences, and reconsideration triggers.
-4. **AI/agent design controls** — model necessity, grounding, tool mediation, least privilege, prompt-injection boundaries, human approval, evals, and durable state ownership.
+## Example prompts
 
-See [`references/sources.md`](references/sources.md).
-
-## Install / use
-
-Agent Skills-compatible tools can install or point to this directory as a skill. The required file is [`SKILL.md`](SKILL.md).
-
-For tools that do not implement Agent Skills, copy the `SKILL.md` instructions into the tool's reusable-agent/instructions mechanism and keep the `references/` directory available.
-
-### Example prompts
-
+### Software
 ```text
 Use System Design Architect. I want to build a family budget app that imports bank CSVs and categorizes expenses with AI.
 ```
 
+### Existing repository
 ```text
-Use System Design Architect to review this repository. Reconstruct the current architecture first, identify the highest-risk issues, then give me an evolutionary target architecture. Do not rewrite it just for cleanliness.
+Review this repository. Reconstruct the current architecture from evidence first, identify the highest-risk issues, then give me the smallest useful evolutionary target architecture.
 ```
 
+### Teaching Mode
 ```text
-Use System Design Architect in Change Design mode. I want to add autonomous employee onboarding actions to this existing HR platform.
+Use Teaching Mode. Teach me how this marketplace works by unfolding the system graph one stage at a time. Do not show me the finished architecture first.
 ```
 
-## What it produces
+### Business process
+```text
+Design our employee onboarding operating system. Treat People Ops, IT, payroll, managers and new hires as actors in a business system. Do not assume this is primarily a software problem.
+```
 
-Depending on complexity:
-- problem/scope definition
-- functional and non-functional requirements
-- evidence ledger: Observed / Assumed / Proposed
-- criticality and risk classification
-- domain/data ownership model
-- architecture options and recommendation
-- C4-style diagrams
-- critical sequence/data flows
-- API/tool/event boundary guidance
-- security/privacy review
-- failure and reliability design
-- scale/performance/cost analysis
-- AI grounding/tool/eval design
-- ADR candidates
-- implementation/migration slices
-- architecture readiness gate
+### Existing non-software system
+```text
+Review our restaurant dinner-service operation. Reconstruct the as-is flow, queues and handoffs first, then teach me why the bottlenecks happen and progressively show the target system.
+```
 
-## Existing systems
+## Methodology
 
-The skill uses an **as-is -> risks -> smallest target -> migration** approach. It explicitly avoids “rewrite syndrome.” Working behavior is preserved unless a rewrite is backed by evidence.
+The skill combines:
+- systems thinking and feedback-loop analysis
+- Well-Architected quality lenses
+- C4-style software architecture views where applicable
+- Architecture/System Decision Records
+- evidence-grounded existing-system discovery
+- data consistency and transaction reasoning
+- reliability/resilience and failure-mode design
+- security/privacy/governance controls
+- AI/agent grounding, autonomy, tool mediation and evals
+- architecture/system fitness checks
+- progressive teaching
 
-## AI systems
+See [`references/sources.md`](references/sources.md).
 
-The skill enforces several architectural principles:
+## Important references
 
-- An LLM is not a source of truth.
-- Prompt text is not an authorization system.
-- Critical rules should be deterministic.
-- Privileged operations should pass through narrow tools/domain services.
-- Durable workflow state should live outside model context.
-- RAG is used only when retrieval is actually needed.
-- Multi-agent architecture must justify its added complexity.
-- Evals are part of system design, not a launch-afterthought.
+- [`references/process.md`](references/process.md)
+- [`references/domain-neutral-systems.md`](references/domain-neutral-systems.md)
+- [`references/teaching-mode.md`](references/teaching-mode.md)
+- [`references/discovery.md`](references/discovery.md)
+- [`references/data-systems.md`](references/data-systems.md)
+- [`references/reliability.md`](references/reliability.md)
+- [`references/security.md`](references/security.md)
+- [`references/ai-systems.md`](references/ai-systems.md)
+- [`references/architecture-fitness.md`](references/architecture-fitness.md)
+
+## Examples
+
+- [`examples/new-ai-hr-assistant.md`](examples/new-ai-hr-assistant.md)
+- [`examples/existing-agent-review.md`](examples/existing-agent-review.md)
+- [`examples/non-software-employee-onboarding-system.md`](examples/non-software-employee-onboarding-system.md)
 
 ## Templates
 
@@ -113,47 +193,33 @@ The skill enforces several architectural principles:
 - [`templates/THREAT_MODEL.md`](templates/THREAT_MODEL.md)
 - [`templates/FITNESS_CHECKS.md`](templates/FITNESS_CHECKS.md)
 
-Create a new design dossier:
+## Validation and evals
 
-```bash
-python scripts/scaffold.py "My Product" --out ./architecture
-```
-
-## Validation
-
-A dependency-free repository sanity check is included:
+Run the local project validator:
 
 ```bash
 python scripts/validate_skill.py
 ```
 
-CI also runs the official Agent Skills reference validator and validates `evals/evals.json`. The eval set intentionally checks that the skill avoids unjustified microservices, Kafka/event infrastructure, RAG/vector databases, and unsafe direct agent writes—and recognizes when those patterns are actually justified.
+CI also runs the Agent Skills reference validator and validates `evals/evals.json`.
 
-For implementations that use the Agent Skills reference validator, you can additionally run the standard `skills-ref validate` command against the skill directory.
-
-## Contributing
-
-Contributions are welcome, especially:
-- architecture review examples
-- failure-mode patterns
-- AI/agent eval patterns
-- security review improvements
-- clearer lightweight workflows
-
-Please see [`CONTRIBUTING.md`](CONTRIBUTING.md).
+The eval suite tests, among other behaviors, whether the skill:
+- avoids unjustified distributed architecture;
+- recognizes when high-scale event infrastructure is justified;
+- protects privileged AI actions;
+- avoids unnecessary RAG/vector databases;
+- teaches progressively rather than dumping an unexplained final graph;
+- uses domain-appropriate language for non-software systems;
+- reconstructs existing non-software systems before proposing change.
 
 ## License
 
 Apache License 2.0. See [`LICENSE`](LICENSE).
 
-## Architecture fitness
+## Contributing
 
-A design is not considered good merely because every section is filled in. For consequential requirements, the skill maps **requirement → architecture mechanism → verification → pass condition**. This turns architectural intent into something teams can test and preserve.
+Contributions are welcome, particularly new domain lenses, progressive-teaching examples, system-review cases, failure-mode patterns, and eval scenarios. See [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ## Versioning
 
-The project follows semantic versioning for the skill metadata. See `CHANGELOG.md` for behavior and methodology changes.
-
-## Security
-
-See `SECURITY.md` for vulnerability-reporting guidance.
+The project follows semantic versioning for skill behavior and methodology. See [`CHANGELOG.md`](CHANGELOG.md).
