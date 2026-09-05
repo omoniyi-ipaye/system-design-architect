@@ -41,7 +41,9 @@
 
 ## 15. Architecture decisions / ADR candidates
 
-## 16. Implementation slices
+## 16. Architecture fitness checks
 
-## 17. Architecture gate
+## 17. Implementation slices
+
+## 18. Architecture gate
 READY | READY WITH ASSUMPTIONS | NOT READY
