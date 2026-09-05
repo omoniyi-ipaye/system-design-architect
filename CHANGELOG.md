@@ -11,6 +11,7 @@
 - Make model-driven visual synchronization a non-negotiable rule in `SKILL.md`.
 - Add canonical model and renderer smoke tests to CI.
 - Require generated views to remain representations of the model rather than independent editable sources of structural truth.
+- Refresh README around the canonical-model workflow and visual renderer.
 
 ## 2.1.0 - 2026-09-05
 - Make **visual-first** behavior part of the core execution contract rather than optional diagram guidance.
