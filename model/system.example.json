@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0.0",
+  "system": {
+    "id": "employee-onboarding",
+    "name": "Employee Onboarding System",
+    "purpose": "Ensure every new hire is productive, compliant, equipped, and connected by Day 1.",
+    "stage": "mixed",
+    "domain": "people-operations",
+    "desired_outcomes": [
+      {"text": "New hires can perform core work on Day 1", "evidence": "proposed"},
+      {"text": "Payroll and access are correct before start date", "evidence": "proposed"}
+    ],
+    "constraints": [
+      {"text": "Manager input is required before provisioning can complete", "evidence": "observed", "source": "current process observation"}
+    ]
+  },
+  "boundaries": [
+    {"id": "onboarding", "name": "Onboarding operating system", "stage": "as_is", "evidence": "observed"}
+  ],
+  "elements": [
+    {"id": "new-hire", "name": "New Hire", "kind": "actor", "stage": "as_is", "evidence": "observed"},
+    {"id": "manager", "name": "Manager", "kind": "actor", "stage": "as_is", "evidence": "observed"},
+    {"id": "people-ops", "name": "People Ops", "kind": "capability", "stage": "as_is", "evidence": "observed", "owner": "People Ops"},
+    {"id": "it", "name": "IT Provisioning", "kind": "capability", "stage": "as_is", "evidence": "observed", "owner": "IT"},
+    {"id": "payroll", "name": "Payroll Setup", "kind": "capability", "stage": "as_is", "evidence": "observed", "owner": "Payroll"},
+    {"id": "readiness", "name": "Day-1 Readiness Check", "kind": "control", "stage": "target", "evidence": "proposed", "owner": "People Ops"},
+    {"id": "late-input-queue", "name": "Late Manager Input Queue", "kind": "queue", "stage": "target", "evidence": "proposed", "owner": "People Ops"}
+  ],
+  "flows": [
+    {"id": "f1", "from": "manager", "to": "people-ops", "type": "information", "label": "Role and equipment details", "stage": "as_is", "evidence": "observed", "handoff_contract": {"required_input": "complete hire details", "owner": "Manager", "acknowledgement": "People Ops receipt", "timing": "T-10 business days", "failure_behavior": "case becomes at-risk", "escalation": "manager + manager's manager"}},
+    {"id": "f2", "from": "people-ops", "to": "it", "type": "work", "label": "Provision access and equipment", "stage": "as_is", "evidence": "observed"},
+    {"id": "f3", "from": "people-ops", "to": "payroll", "type": "information", "label": "Payroll-ready hire data", "stage": "as_is", "evidence": "observed"},
+    {"id": "f4", "from": "manager", "to": "late-input-queue", "type": "information", "label": "Late/missing manager input", "stage": "target", "evidence": "proposed"},
+    {"id": "f5", "from": "late-input-queue", "to": "readiness", "type": "feedback", "label": "At-risk readiness signal", "stage": "target", "evidence": "proposed"}
+  ],
+  "risks": [
+    {"id": "r1", "name": "Late manager data blocks laptop setup", "severity": "high", "stage": "as_is", "affects": ["manager", "it", "new-hire"], "cause": "manager details arrive too late", "control": "T-10 readiness checkpoint", "recovery": "route to exception queue and escalate"}
+  ],
+  "capacity": [
+    {"id": "c1", "name": "IT provisioning", "stage": "as_is", "arrival_rate": null, "processing_rate": null, "unit": "hires/day", "queue": "pending provisioning", "notes": "measure before automating capacity decisions"}
+  ],
+  "fitness_checks": [
+    {"id": "fc1", "requirement": "Every hire should be ready for core work on Day 1", "mechanism": "readiness check across access, equipment, payroll and manager plan", "verification": "pre-start checklist completeness", "pass_condition": "all critical readiness items green before start", "validation": "new hire confirms ability to perform core tasks during first workday"}
+  ],
+  "health_signals": [
+    {"id": "s1", "name": "Day-1 readiness rate", "desired_state": ">= 98%", "source": "readiness checks", "threshold": "<95% over rolling 20 hires", "owner": "People Ops"},
+    {"id": "s2", "name": "Late manager submissions", "desired_state": "<5%", "source": "handoff timestamps", "threshold": ">10% in 30 days", "owner": "People Ops"}
+  ],
+  "recovery_actions": [
+    {"id": "ra1", "trigger": "manager input late at T-7", "action": "route to exception lane, notify manager, and assign backup follow-up owner", "authority": "People Ops", "level": "L2", "reversible": true, "verification": "critical Day-1 dependencies return to green", "escalation": "People Ops lead if still blocked at T-3"}
+  ],
+  "adaptation": {
+    "level": "L2",
+    "allowed": ["reroute late cases", "send escalation", "assign backup follow-up owner"],
+    "requires_governed_redesign": ["change manager accountability policy", "change employment eligibility rules", "change source-of-truth ownership"],
+    "max_blast_radius": "single onboarding case"
+  },
+  "transitions": [
+    {"id": "t1", "from": "as_is", "to": "target", "change": "introduce T-10 readiness check and late-input exception lane", "verification": "pilot 20 hires with readiness/late-input measures", "rollback": "retain current workflow while disabling new exception-routing automation"}
+  ]
+}
