@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.3.0 - 2026-09-05
+- Add a mandatory **build layer** between high-level system design and implementation.
+- Add `references/build-layer.md` with granular process-step decomposition rules and a build-pack definition.
+- Add `process_steps` to the canonical model schema with stable IDs, triggers, preconditions, inputs/sources, owner/executor, exact action, decision rule, state transition, outputs, SLA, controls, completion evidence, exceptions, recovery, escalation, automation boundary, audit evidence, health signal, verification, and validation.
+- Expand the employee-onboarding canonical example into nine implementable target steps (`ONB-010` through `ONB-090`).
+- Upgrade `scripts/validate_model.py` to validate granular build steps and guard bounded autonomous process steps.
+- Upgrade `scripts/render_system.py` to render a granular build-specification catalogue alongside system views.
+- Make buildable granularity and a **BUILD READY** gate non-negotiable in `SKILL.md`.
+- Define three layers explicitly: system layer → process layer → build layer.
+- Require serious build engagements to produce a build pack including state, decisions, interfaces, controls, exception/recovery paths, automation allocation, verification/validation, and implementation backlog.
+- Strengthen project validation against regressions back to architecture-only outputs.
+
 ## 2.2.0 - 2026-09-05
 - Add a canonical machine-readable system model as the structural source of truth for non-trivial engagements.
 - Add `model/system.schema.json` with domain-neutral elements, typed flows, evidence states, AS-IS/TRANSITION/TARGET/shared stages, risks, capacity, fitness checks, health signals, recovery actions, and adaptation envelopes.
