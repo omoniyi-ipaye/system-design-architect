@@ -44,6 +44,7 @@ required = [
     "references/daily-use.md",
     "references/visual-first.md",
     "references/canonical-model.md",
+    "references/build-layer.md",
     "references/process.md",
     "references/domain-neutral-systems.md",
     "references/diagramming.md",
@@ -105,17 +106,14 @@ validate_eval_file(ROOT / "evals/visual-daily-evals.json", 4)
 
 for json_path in [ROOT / "model/system.schema.json", ROOT / "model/system.example.json"]:
     try:
-        json.loads(json_path.read_text(encoding="utf-8"))
+        data = json.loads(json_path.read_text(encoding="utf-8"))
+        if json_path.name == "system.example.json" and len(data.get("process_steps", [])) < 5:
+            errors.append("system.example.json should demonstrate at least 5 granular process steps")
     except Exception as exc:
         errors.append(f"invalid JSON {json_path}: {exc}")
 
 lic = (ROOT / "LICENSE").read_text(errors="ignore") if (ROOT / "LICENSE").exists() else ""
-for marker in [
-    "1. Definitions.",
-    "2. Grant of Copyright License.",
-    "9. Accepting Warranty or Additional Liability.",
-    "END OF TERMS AND CONDITIONS",
-]:
+for marker in ["1. Definitions.", "2. Grant of Copyright License.", "9. Accepting Warranty or Additional Liability.", "END OF TERMS AND CONDITIONS"]:
     if marker not in lic:
         errors.append(f"LICENSE appears incomplete: missing {marker}")
 
@@ -125,6 +123,10 @@ if SKILL.exists():
         "domain-neutral",
         "Visual first",
         "End to end",
+        "buildable granularity",
+        "Granular build-step contract",
+        "BUILD READY",
+        "process_steps",
         "AS-IS",
         "TARGET",
         "Verification",
@@ -132,8 +134,7 @@ if SKILL.exists():
         "self-healing",
         "adaptation envelope",
         "Mode D",
-        "references/daily-use.md",
-        "references/visual-first.md",
+        "references/build-layer.md",
     ]:
         if phrase.lower() not in body.lower():
             errors.append(f"SKILL.md missing core concept: {phrase}")
