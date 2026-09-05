@@ -14,15 +14,21 @@ jobs:
           python-version: '3.12'
       - name: Project validation
         run: python scripts/validate_skill.py
-      - name: Install official Agent Skills validator
+      - name: Install Agent Skills reference validator
         run: pip install skills-ref==0.1.1
       - name: Agent Skills specification validation
-        shell: bash
         run: |
-          if command -v skills-ref >/dev/null 2>&1; then
-            skills-ref validate .
-          else
-            agentskills validate .
-          fi
+          python - <<'PY'
+          from pathlib import Path
+          from skills_ref import validate
+          root = Path.cwd().resolve()
+          problems = validate(root)
+          if problems:
+              print("Agent Skills validation failed:")
+              for problem in problems:
+                  print(f"- {problem}")
+              raise SystemExit(1)
+          print("Agent Skills validation passed.")
+          PY
       - name: Validate eval JSON
         run: python -m json.tool evals/evals.json >/dev/null
