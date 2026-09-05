@@ -14,6 +14,15 @@ jobs:
           python-version: '3.12'
       - name: Project validation
         run: python scripts/validate_skill.py
+      - name: Canonical model validation
+        run: python scripts/validate_model.py model/system.example.json
+      - name: Renderer smoke test
+        run: |
+          python scripts/render_system.py model/system.example.json --out /tmp/system-views.html
+          test -s /tmp/system-views.html
+          grep -q "AS-IS" /tmp/system-views.html
+          grep -q "TARGET" /tmp/system-views.html
+          grep -q "Health & adaptive loop" /tmp/system-views.html
       - name: Install Agent Skills reference validator
         run: pip install skills-ref==0.1.1
       - name: Agent Skills specification validation
@@ -31,4 +40,6 @@ jobs:
           print("Agent Skills validation passed.")
           PY
       - name: Validate eval JSON
-        run: python -m json.tool evals/evals.json >/dev/null
+        run: |
+          python -m json.tool evals/evals.json >/dev/null
+          python -m json.tool evals/visual-daily-evals.json >/dev/null
