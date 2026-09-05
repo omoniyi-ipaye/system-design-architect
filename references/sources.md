@@ -1,26 +1,28 @@
 # Methodology Sources
 
-This skill is an original synthesis. It does not copy any single framework. The following sources informed the design principles and review lenses.
+This skill is an original synthesis. Frameworks below are used as quality lenses, not vendor-specific prescriptions.
 
-## Well-Architected frameworks
-- AWS Well-Architected Framework — operational excellence, security, reliability, performance efficiency, cost optimization, sustainability: https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html
-- Google Cloud Well-Architected Framework — operational excellence, security, reliability, cost, performance, sustainability: https://docs.cloud.google.com/docs/get-started/well-architected-framework
-- Microsoft Azure Well-Architected Framework — reliability, security, cost optimization, operational excellence, performance efficiency: https://learn.microsoft.com/azure/well-architected/
+| Source | Document / version | Principles used here | Last verified |
+|---|---|---|---|
+| Agent Skills | Specification + evaluating skills guidance | Skill structure, progressive disclosure, official validation, eval-driven iteration | 2026-09 |
+| AWS | Well-Architected Framework / Reliability Pillar | reliability, operations, monitoring, failure recovery, adapting to demand | 2026-09 |
+| Google Cloud | Well-Architected Framework | reliability, security, operations, performance, cost, sustainability | 2026-09 |
+| Microsoft Azure | Well-Architected Framework | reliability, security, cost, operations, performance | 2026-09 |
+| C4 model | Current C4 documentation | context/container/component/dynamic/deployment views | 2026-09 |
+| MADR / ADR community | Architecture Decision Records | decision context, options, rationale, consequences, reconsideration | 2026-09 |
+| NIST | AI RMF + Generative AI Profile | AI risk, governance, measurement, trustworthiness | 2026-09 |
+| OWASP GenAI Security Project | Top 10 for Agentic Applications 2026 + Agent Control Standard resources | agent privilege, tool misuse, untrusted context, identity, control boundaries | 2026-09 |
+| Model Context Protocol | Current specification | tool/resource boundaries and interoperability context | 2026-09 |
 
-## Architecture communication and decisions
-- C4 model by Simon Brown — context, container, component, code plus dynamic/deployment views: https://c4model.com/
-- MADR / Architecture Decision Records: https://adr.github.io/madr/
-
-## AI risk and agent engineering
-- NIST AI Risk Management Framework: https://www.nist.gov/itl/ai-risk-management-framework
-- NIST Generative AI Profile (NIST AI 600-1): https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-generative-artificial-intelligence
-- Anthropic, “Building effective agents” / agent engineering materials and 2026 eval guidance: https://www.anthropic.com/engineering/
-- Model Context Protocol specification: https://modelcontextprotocol.io/
-
-## Agent Skills format
-- Agent Skills specification: https://agentskills.io/specification
-
-## Important note
-Cloud provider frameworks are used here as quality lenses, not as vendor-specific architecture prescriptions. The skill intentionally remains vendor-neutral.
-- OWASP Top 10 for Agentic Applications 2026: https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/
-- OWASP AI Agent Security Cheat Sheet: https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html
+## Links
+- Agent Skills: https://agentskills.io/specification
+- Agent Skills eval guidance: https://agentskills.io/skill-creation/evaluating-skills
+- AWS Well-Architected: https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html
+- Google Cloud Well-Architected: https://docs.cloud.google.com/docs/get-started/well-architected-framework
+- Azure Well-Architected: https://learn.microsoft.com/azure/well-architected/
+- C4: https://c4model.com/
+- MADR: https://adr.github.io/madr/
+- NIST AI RMF: https://www.nist.gov/itl/ai-risk-management-framework
+- NIST Generative AI Profile: https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-generative-artificial-intelligence
+- OWASP Agentic Top 10 2026: https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/
+- MCP: https://modelcontextprotocol.io/
