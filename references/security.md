@@ -41,3 +41,9 @@ For every high-impact write, define:
 - Isolate untrusted retrieved content from privileged tool control.
 - Give tools narrow schemas and scoped credentials.
 - Log/trace high-impact tool requests and outcomes.
+
+## Threat scenarios
+For Standard and High-assurance systems, document concrete abuse paths rather than generic security bullets. A useful table includes: threat, attack path, impact, preventive control, detective/recovery control, and residual risk. Use `templates/THREAT_MODEL.md`.
+
+## Data plane vs control plane for AI
+Untrusted documents, webpages, email, retrieved chunks, user files, and external tool output belong to the data plane. They must not redefine tool permissions, authorization policy, system instructions, or approval requirements in the control plane.
