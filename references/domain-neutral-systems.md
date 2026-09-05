@@ -102,6 +102,7 @@ Regardless of domain, answer:
 11. How do we know the system is healthy?
 12. What trade-offs shape the design?
 13. How can the system evolve safely?
+14. How will the system detect drift, recover, learn, and adapt over time?
 
 ## Translation table
 
@@ -167,6 +168,26 @@ When people or organizations are central, ask:
 - Which steps require judgment rather than standardization?
 
 Do not assume a process diagram describes actual behavior.
+
+## Adaptive / self-healing operation
+
+A system should be designed not only to reach a target state but to remain effective as conditions change.
+
+For material systems define a closed loop:
+
+**desired outcome → sensing → deviation detection → diagnosis → bounded response → recovery verification → learning → governed adaptation**
+
+Examples of sensing outside software include backlog growth, missed deadlines, error/rework rates, customer wait time, inventory shortage, equipment state, manager completion, employee experience, safety signals, or supplier performance.
+
+A self-healing system does not mean unlimited autonomy. Separate:
+- actions safe to perform automatically;
+- actions that may be recommended but require human execution;
+- consequential changes requiring explicit approval;
+- structural changes that must return to the full system-design and verification process.
+
+Prefer reversible recovery and small blast radius. Never let an adaptive mechanism silently redefine system purpose, critical controls, decision rights, or authoritative records.
+
+See [`adaptive-systems.md`](adaptive-systems.md) and [`../templates/ADAPTIVE_OPERATING_LOOP.md`](../templates/ADAPTIVE_OPERATING_LOOP.md).
 
 ## Existing non-software systems
 
