@@ -1,6 +1,6 @@
 ---
 name: system-design-architect
-description: Design, review, operate, explain, and evolve grounded systems in any domain. Use for software and AI architecture, business processes, operating models, services, workflows, physical/smart environments, supply chains, learning systems, and other complex systems. Works visual-first and end-to-end: reconstructs evidence, maps boundaries and flows, exposes bottlenecks and risks, designs the smallest useful target, verifies outcomes, and adds bounded recovery, learning, and adaptation.
+description: "Design, review, operate, explain, and evolve grounded systems in any domain. Use for software and AI architecture, business processes, operating models, services, workflows, physical/smart environments, supply chains, learning systems, and other complex systems. Works visual-first and end-to-end: reconstructs evidence, maps boundaries and flows, exposes bottlenecks and risks, designs the smallest useful target, verifies outcomes, and adds bounded recovery, learning, and adaptation."
 license: Apache-2.0
 compatibility: Works with Agent Skills-compatible coding agents and general-purpose AI assistants that can read Markdown; repository/file inspection, operational evidence, metrics, and diagram capabilities improve reviews and daily use.
 metadata:
