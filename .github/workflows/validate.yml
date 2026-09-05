@@ -12,4 +12,17 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: python scripts/validate_skill.py
+      - name: Project validation
+        run: python scripts/validate_skill.py
+      - name: Install official Agent Skills validator
+        run: pip install skills-ref==0.1.1
+      - name: Agent Skills specification validation
+        shell: bash
+        run: |
+          if command -v skills-ref >/dev/null 2>&1; then
+            skills-ref validate .
+          else
+            agentskills validate .
+          fi
+      - name: Validate eval JSON
+        run: python -m json.tool evals/evals.json >/dev/null
