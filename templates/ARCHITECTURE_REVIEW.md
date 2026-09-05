@@ -26,4 +26,6 @@
 
 ## ADR candidates
 
+## Architecture fitness checks
+
 ## Architecture gate
