@@ -35,44 +35,14 @@
       },
       "default": []
     },
-    "elements": {
-      "type": "array",
-      "items": {"$ref": "#/$defs/element"}
-    },
-    "flows": {
-      "type": "array",
-      "items": {"$ref": "#/$defs/flow"}
-    },
-    "decisions": {
-      "type": "array",
-      "items": {"$ref": "#/$defs/decision"},
-      "default": []
-    },
-    "risks": {
-      "type": "array",
-      "items": {"$ref": "#/$defs/risk"},
-      "default": []
-    },
-    "capacity": {
-      "type": "array",
-      "items": {"$ref": "#/$defs/capacity"},
-      "default": []
-    },
-    "fitness_checks": {
-      "type": "array",
-      "items": {"$ref": "#/$defs/fitness"},
-      "default": []
-    },
-    "health_signals": {
-      "type": "array",
-      "items": {"$ref": "#/$defs/signal"},
-      "default": []
-    },
-    "recovery_actions": {
-      "type": "array",
-      "items": {"$ref": "#/$defs/recovery"},
-      "default": []
-    },
+    "elements": {"type": "array", "items": {"$ref": "#/$defs/element"}},
+    "flows": {"type": "array", "items": {"$ref": "#/$defs/flow"}},
+    "decisions": {"type": "array", "items": {"$ref": "#/$defs/decision"}, "default": []},
+    "risks": {"type": "array", "items": {"$ref": "#/$defs/risk"}, "default": []},
+    "capacity": {"type": "array", "items": {"$ref": "#/$defs/capacity"}, "default": []},
+    "fitness_checks": {"type": "array", "items": {"$ref": "#/$defs/fitness"}, "default": []},
+    "health_signals": {"type": "array", "items": {"$ref": "#/$defs/signal"}, "default": []},
+    "recovery_actions": {"type": "array", "items": {"$ref": "#/$defs/recovery"}, "default": []},
     "adaptation": {
       "type": "object",
       "properties": {
@@ -89,8 +59,8 @@
         "required": ["id", "from", "to", "change"],
         "properties": {
           "id": {"type": "string"},
-          "from": {"$ref": "#/$defs/stage"},
-          "to": {"$ref": "#/$defs/stage"},
+          "from": {"enum": ["as_is", "transition", "target"]},
+          "to": {"enum": ["as_is", "transition", "target"]},
           "change": {"type": "string"},
           "verification": {"type": "string"},
           "rollback": {"type": "string"}
@@ -100,7 +70,7 @@
     }
   },
   "$defs": {
-    "stage": {"enum": ["as_is", "transition", "target"]},
+    "stage": {"enum": ["as_is", "transition", "target", "shared"]},
     "evidence": {"enum": ["observed", "assumed", "proposed", "unknown"]},
     "claim": {
       "type": "object",
