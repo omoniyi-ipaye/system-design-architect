@@ -273,6 +273,7 @@ function createServer(): McpServer {
         destructiveHint: false,
         openWorldHint: false,
       },
+      _meta: {},
     },
     async ({ model }) => {
       const validation = validateCanonicalModel(model as CanonicalModel);
