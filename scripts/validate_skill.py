@@ -41,8 +41,11 @@ else:
         errors.append("SKILL.md exceeds recommended 500 lines")
 
 required = [
+    "references/daily-use.md",
+    "references/visual-first.md",
     "references/process.md",
     "references/domain-neutral-systems.md",
+    "references/diagramming.md",
     "references/teaching-mode.md",
     "references/adaptive-systems.md",
     "references/discovery.md",
@@ -53,6 +56,7 @@ required = [
     "references/security.md",
     "references/review-matrix.md",
     "references/sources.md",
+    "templates/SYSTEM_VIEW_PACK.md",
     "templates/ADR.md",
     "templates/DESIGN.md",
     "templates/ARCHITECTURE_REVIEW.md",
@@ -61,6 +65,7 @@ required = [
     "templates/THREAT_MODEL.md",
     "templates/FITNESS_CHECKS.md",
     "evals/evals.json",
+    "evals/visual-daily-evals.json",
     "LICENSE",
     "SECURITY.md",
     "CHANGELOG.md",
@@ -69,23 +74,29 @@ for rel in required:
     if not (ROOT / rel).exists():
         errors.append(f"missing required repository file: {rel}")
 
-try:
-    ev = json.loads((ROOT / "evals/evals.json").read_text(encoding="utf-8"))
-    if ev.get("skill_name") != "system-design-architect":
-        errors.append("eval skill_name mismatch")
-    scenarios = ev.get("evals", [])
-    if len(scenarios) < 10:
-        errors.append("expected at least 10 eval scenarios for v2 behavior coverage")
-    ids = [item.get("id") for item in scenarios]
-    if len(ids) != len(set(ids)):
-        errors.append("eval scenario IDs must be unique")
-    for item in scenarios:
-        if not item.get("prompt") or not item.get("expected_output"):
-            errors.append(f"eval {item.get('id')} missing prompt or expected_output")
-        if len(item.get("assertions", [])) < 2:
-            errors.append(f"eval {item.get('id')} should have at least 2 assertions")
-except Exception as e:
-    errors.append(f"invalid evals/evals.json: {e}")
+
+def validate_eval_file(path: Path, minimum: int) -> None:
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        if data.get("skill_name") != "system-design-architect":
+            errors.append(f"{path.name}: skill_name mismatch")
+        scenarios = data.get("evals", [])
+        if len(scenarios) < minimum:
+            errors.append(f"{path.name}: expected at least {minimum} eval scenarios")
+        ids = [item.get("id") for item in scenarios]
+        if len(ids) != len(set(ids)):
+            errors.append(f"{path.name}: eval scenario IDs must be unique")
+        for item in scenarios:
+            if not item.get("prompt") or not item.get("expected_output"):
+                errors.append(f"{path.name}: eval {item.get('id')} missing prompt or expected_output")
+            if len(item.get("assertions", [])) < 2:
+                errors.append(f"{path.name}: eval {item.get('id')} should have at least 2 assertions")
+    except Exception as exc:
+        errors.append(f"invalid {path}: {exc}")
+
+
+validate_eval_file(ROOT / "evals/evals.json", 10)
+validate_eval_file(ROOT / "evals/visual-daily-evals.json", 4)
 
 lic = (ROOT / "LICENSE").read_text(errors="ignore") if (ROOT / "LICENSE").exists() else ""
 for marker in [
@@ -97,19 +108,25 @@ for marker in [
     if marker not in lic:
         errors.append(f"LICENSE appears incomplete: missing {marker}")
 
-# Guard against regressions to a software-only identity.
+# Guard against regressions in the product identity and daily-use behavior.
 if SKILL.exists():
     body = SKILL.read_text(encoding="utf-8")
     for phrase in [
         "domain-neutral",
+        "Visual first",
+        "End to end",
+        "AS-IS",
+        "TARGET",
         "Verification",
         "Validation",
         "self-healing",
         "adaptation envelope",
         "Mode D",
+        "references/daily-use.md",
+        "references/visual-first.md",
     ]:
         if phrase.lower() not in body.lower():
-            errors.append(f"SKILL.md missing v2 core concept: {phrase}")
+            errors.append(f"SKILL.md missing core concept: {phrase}")
 
 if errors:
     for e in errors:
