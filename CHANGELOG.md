@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.2.0 - 2026-09-05
+- Add a canonical machine-readable system model as the structural source of truth for non-trivial engagements.
+- Add `model/system.schema.json` with domain-neutral elements, typed flows, evidence states, AS-IS/TRANSITION/TARGET/shared stages, risks, capacity, fitness checks, health signals, recovery actions, and adaptation envelopes.
+- Add `model/system.example.json` as a worked employee-onboarding model.
+- Add `references/canonical-model.md` and `model/README.md` for model-driven daily workflows.
+- Add dependency-free `scripts/validate_model.py` to catch broken references, stage/evidence errors, unsafe recovery definitions, and invalid adaptation envelopes.
+- Add dependency-free `scripts/render_system.py` to generate synchronized self-contained HTML views from one `system.json`.
+- Support `shared` persistent actors/resources that appear consistently in both current and target views without duplicating identity.
+- Make model-driven visual synchronization a non-negotiable rule in `SKILL.md`.
+- Add canonical model and renderer smoke tests to CI.
+- Require generated views to remain representations of the model rather than independent editable sources of structural truth.
+
 ## 2.1.0 - 2026-09-05
 - Make **visual-first** behavior part of the core execution contract rather than optional diagram guidance.
 - Add `references/visual-first.md` with view-selection, layering, evidence, AS-IS/TARGET, and visual quality rules.
