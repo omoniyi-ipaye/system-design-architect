@@ -39,17 +39,37 @@ def stage_map(m, stage):
     legend=" ".join(badge(x) for x in sorted({f.get("type") for f in flows if f.get("type")}))
     return f'<section><div class="head"><div><small>Stage view</small><h2>{LABEL[stage]}</h2></div><div>{legend}</div></div><div class="scroll"><svg viewBox="0 0 {w} {h}"><defs><marker id="a" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z"/></marker></defs>{"".join(lines)}{"".join(nodes)}</svg></div></section>'
 
-def table(title, headers, rows):
+def table(title, headers, rows, cls=""):
     if not rows: return ""
     hs="".join(f"<th>{e(h)}</th>" for h in headers)
     rs="".join("<tr>"+"".join(f"<td>{v}</td>" for v in r)+"</tr>" for r in rows)
-    return f'<section><h2>{e(title)}</h2><div class="scroll"><table><thead><tr>{hs}</tr></thead><tbody>{rs}</tbody></table></div></section>'
+    return f'<section class="{cls}"><h2>{e(title)}</h2><div class="scroll"><table><thead><tr>{hs}</tr></thead><tbody>{rs}</tbody></table></div></section>'
+
+def build_steps(m):
+    steps=sorted(m.get("process_steps",[]), key=lambda x:(x.get("sequence",9999),x.get("id","")))
+    rows=[]
+    for x in steps:
+        ex="<br>".join(e(v) for v in x.get("exceptions",[])) or "—"
+        rows.append([
+            f"<strong>{e(x.get('id'))}</strong><br>{e(x.get('name'))}",
+            e(x.get("trigger")),
+            f"<strong>{e(x.get('owner'))}</strong><br><span class='muted'>{e(x.get('executor'))}</span>",
+            e(x.get("action")),
+            f"{e(x.get('state_before'))} → {e(x.get('state_after'))}",
+            e(x.get("completion_evidence")),
+            ex,
+            e(x.get("exception_route","—")),
+            badge(x.get("automation","—")),
+            e(x.get("verification","—"))
+        ])
+    return table("Granular build specification",["Step","Trigger","Owner / executor","Exact action","State transition","Success evidence","Known exceptions","Exception route","Automation","Verification"],rows,"build-spec")
 
 def report(m):
     s=m["system"]
     outcomes="".join(f'<li>{e(x.get("text"))} {badge(x.get("evidence",""))}</li>' for x in s.get("desired_outcomes",[]))
-    out=[f'<section><small>Canonical system model · schema {e(m.get("schema_version"))}</small><h1>{e(s.get("name"))}</h1><p class="purpose">{e(s.get("purpose"))}</p><div class="stats"><div>Domain<strong>{e(s.get("domain","—"))}</strong></div><div>Stage<strong>{e(s.get("stage","—"))}</strong></div><div>Elements<strong>{len(m.get("elements",[]))}</strong></div><div>Flows<strong>{len(m.get("flows",[]))}</strong></div></div>{("<h3>Desired outcomes</h3><ul>"+outcomes+"</ul>") if outcomes else ""}</section>']
+    out=[f'<section><small>Canonical system model · schema {e(m.get("schema_version"))}</small><h1>{e(s.get("name"))}</h1><p class="purpose">{e(s.get("purpose"))}</p><div class="stats"><div>Domain<strong>{e(s.get("domain","—"))}</strong></div><div>Stage<strong>{e(s.get("stage","—"))}</strong></div><div>Elements<strong>{len(m.get("elements",[]))}</strong></div><div>Build steps<strong>{len(m.get("process_steps",[]))}</strong></div></div>{("<h3>Desired outcomes</h3><ul>"+outcomes+"</ul>") if outcomes else ""}</section>']
     out += [stage_map(m,x) for x in STAGES]
+    out.append(build_steps(m))
     trs=[]
     for x in m.get("transitions",[]): trs.append([badge(LABEL.get(x.get("from"),x.get("from"))),e(x.get("change")),e(x.get("verification","—")),e(x.get("rollback","—")),badge(LABEL.get(x.get("to"),x.get("to")))])
     out.append(table("Current → transition → target",["From","Change","Verify","Rollback","To"],trs))
@@ -68,7 +88,7 @@ def report(m):
     out.append(table("Health signals",["Signal","Desired","Trigger","Owner"],sig)); out.append(table("Recovery actions",["Level","Trigger","Action","Authority","Verify"],rec))
     return "".join(x for x in out if x)
 
-CSS='''*{box-sizing:border-box}body{margin:0;background:#f6f6f3;color:#181818;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}.page{max-width:1180px;margin:auto;padding:32px 20px 72px}section{background:white;border:1px solid #dfdfda;border-radius:18px;padding:22px;margin-bottom:16px}small{color:#777;text-transform:uppercase;letter-spacing:.08em;font-weight:700}h1{font-size:36px;margin:6px 0}h2{font-size:24px;margin:4px 0 14px}h3{font-size:15px}.purpose{font-size:18px;color:#454545}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.stats div{border:1px solid #e7e7e2;border-radius:12px;padding:12px;color:#777;font-size:12px}.stats strong{display:block;color:#222;margin-top:4px}.head{display:flex;justify-content:space-between;align-items:end}.badge{display:inline-block;border:1px solid #d8d8d3;border-radius:999px;padding:3px 8px;font-size:11px;background:#f7f7f4}.scroll{overflow:auto}svg{width:100%;min-width:720px;height:auto;background:#fcfcfa;border:1px solid #eee;border-radius:12px}svg rect{fill:#fff;stroke:#aaa;stroke-width:1.4}svg text{font-size:12px;font-weight:650;fill:#222}.meta,.edge{font-size:9px;font-weight:500;fill:#777}svg line{stroke:#888;stroke-width:1.5}marker path{fill:#888}table{width:100%;border-collapse:collapse;font-size:13px}th{text-align:left;color:#777;font-size:11px;text-transform:uppercase}th,td{padding:11px 9px;border-bottom:1px solid #eee;vertical-align:top}.loop{border:1px solid #e4e4df;border-radius:12px;padding:14px;background:#fafaf7;line-height:1.8}@media(max-width:700px){.stats{grid-template-columns:1fr 1fr}h1{font-size:29px}}'''
+CSS='''*{box-sizing:border-box}body{margin:0;background:#f6f6f3;color:#181818;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}.page{max-width:1320px;margin:auto;padding:32px 20px 72px}section{background:white;border:1px solid #dfdfda;border-radius:18px;padding:22px;margin-bottom:16px}small{color:#777;text-transform:uppercase;letter-spacing:.08em;font-weight:700}h1{font-size:36px;margin:6px 0}h2{font-size:24px;margin:4px 0 14px}h3{font-size:15px}.purpose{font-size:18px;color:#454545}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.stats div{border:1px solid #e7e7e2;border-radius:12px;padding:12px;color:#777;font-size:12px}.stats strong{display:block;color:#222;margin-top:4px}.head{display:flex;justify-content:space-between;align-items:end}.badge{display:inline-block;border:1px solid #d8d8d3;border-radius:999px;padding:3px 8px;font-size:11px;background:#f7f7f4}.scroll{overflow:auto}svg{width:100%;min-width:720px;height:auto;background:#fcfcfa;border:1px solid #eee;border-radius:12px}svg rect{fill:#fff;stroke:#aaa;stroke-width:1.4}svg text{font-size:12px;font-weight:650;fill:#222}.meta,.edge{font-size:9px;font-weight:500;fill:#777}svg line{stroke:#888;stroke-width:1.5}marker path{fill:#888}table{width:100%;border-collapse:collapse;font-size:13px}th{text-align:left;color:#777;font-size:11px;text-transform:uppercase}th,td{padding:11px 9px;border-bottom:1px solid #eee;vertical-align:top}.muted{color:#777;font-size:11px}.build-spec table{min-width:1600px}.build-spec td:nth-child(1){min-width:160px}.build-spec td:nth-child(4){min-width:260px}.loop{border:1px solid #e4e4df;border-radius:12px;padding:14px;background:#fafaf7;line-height:1.8}@media(max-width:700px){.stats{grid-template-columns:1fr 1fr}h1{font-size:29px}}'''
 
 def main():
     p=argparse.ArgumentParser(); p.add_argument("model"); p.add_argument("--out"); a=p.parse_args()
