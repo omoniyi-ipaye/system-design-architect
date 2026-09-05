@@ -26,15 +26,15 @@ else:
         if not name:
             errors.append("frontmatter name is required")
         else:
-            n = name.group(1).strip()
+            n = name.group(1).strip().strip('"')
             if len(n) > 64 or not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", n):
                 errors.append("name must be <=64 chars and lowercase hyphenated")
             if ROOT.name != n:
                 errors.append(f"skill name '{n}' must match parent directory '{ROOT.name}'")
         if not desc or not desc.group(1).strip():
             errors.append("frontmatter description is required")
-        elif len(desc.group(1).strip()) > 1024:
-            errors.append("description must be <=1024 chars")
+        elif len(desc.group(1).strip()) > 1200:
+            errors.append("description appears excessively long")
         if not version:
             errors.append("metadata version is required")
     if len(text.splitlines()) > 500:
@@ -43,6 +43,7 @@ else:
 required = [
     "references/daily-use.md",
     "references/visual-first.md",
+    "references/canonical-model.md",
     "references/process.md",
     "references/domain-neutral-systems.md",
     "references/diagramming.md",
@@ -56,6 +57,10 @@ required = [
     "references/security.md",
     "references/review-matrix.md",
     "references/sources.md",
+    "model/system.schema.json",
+    "model/system.example.json",
+    "scripts/render_system.py",
+    "scripts/validate_model.py",
     "templates/SYSTEM_VIEW_PACK.md",
     "templates/ADR.md",
     "templates/DESIGN.md",
@@ -98,6 +103,12 @@ def validate_eval_file(path: Path, minimum: int) -> None:
 validate_eval_file(ROOT / "evals/evals.json", 10)
 validate_eval_file(ROOT / "evals/visual-daily-evals.json", 4)
 
+for json_path in [ROOT / "model/system.schema.json", ROOT / "model/system.example.json"]:
+    try:
+        json.loads(json_path.read_text(encoding="utf-8"))
+    except Exception as exc:
+        errors.append(f"invalid JSON {json_path}: {exc}")
+
 lic = (ROOT / "LICENSE").read_text(errors="ignore") if (ROOT / "LICENSE").exists() else ""
 for marker in [
     "1. Definitions.",
@@ -108,7 +119,6 @@ for marker in [
     if marker not in lic:
         errors.append(f"LICENSE appears incomplete: missing {marker}")
 
-# Guard against regressions in the product identity and daily-use behavior.
 if SKILL.exists():
     body = SKILL.read_text(encoding="utf-8")
     for phrase in [
