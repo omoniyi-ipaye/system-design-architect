@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.2.0 - 2026-09-05
+- Expand System Design Architect from software-only architecture into domain-neutral systems design.
+- Add independent lifecycle, domain-lens, and presentation-mode selection.
+- Add Teaching Mode with a progressively unfolding system graph.
+- Add domain-neutral mappings for business processes, organizations, services, physical/smart environments, supply chains, and learning systems.
+- Add feedback-loop, decision-right, incentive, handoff, capacity, and resource-flow analysis for non-software systems.
+- Add teaching and non-software eval scenarios.
+- Add a non-software employee-onboarding system example.
+
 ## 1.1.0 - 2026-09-05
 - Add existing-system discovery protocol.
 - Add data consistency, transaction, schema-evolution, and reconciliation guidance.
