@@ -1,5 +1,24 @@
 # Changelog
 
+## 2.0.0 - 2026-09-05
+- Make domain-neutral systems design the core identity of the skill rather than an extension to software architecture.
+- Add a universal lifecycle: purpose → design → verify/validate → operate → sense → detect → diagnose → respond → recover → verify → learn → adapt.
+- Add Mode D: Adaptive Operation / System Health for already-running systems.
+- Make verification vs validation explicit across all domains.
+- Add outcome hierarchy: activity, output, outcome, and system health.
+- Add multi-flow analysis for work, information, authority/decision, state, money/material/resource flows.
+- Treat handoffs/interfaces as contracts with ownership, acknowledgement, timing, failure behavior, and escalation.
+- Add capacity, queue, backlog, bottleneck, and demand-vs-processing analysis as first-class system design.
+- Add operability maturity: Observable, Recoverable, Adaptive, and Self-Healing Within Bounds.
+- Formalize bounded self-healing with autonomy levels L0-L3 and an explicit adaptation envelope.
+- Prohibit silent autonomous changes to purpose, critical policy, authority model, safety boundaries, or sources of truth.
+- Add `templates/SYSTEM_HEALTH.md` for live system-health assessments.
+- Upgrade design and review templates to include verification, validation, feedback, recovery, adaptation, and operability gates.
+- Upgrade `scripts/scaffold.py` with `--mode design|review|health|adaptive`.
+- Expand the review matrix to cover whole-system outcomes, ownership, flows, capacity, incentives, sensing, recovery, adaptation governance, and AI safety.
+- Expand evals to cover verification-vs-validation, capacity constraints, system drift, bounded self-healing, and refusal of uncontrolled autonomous redesign.
+- Ground the methodology more explicitly in systems engineering, NIST resilience, SRE, service/process design, and software/AI architecture practices.
+
 ## 1.2.0 - 2026-09-05
 - Expand System Design Architect from software-only architecture into domain-neutral systems design.
 - Add independent lifecycle, domain-lens, and presentation-mode selection.
