@@ -31,7 +31,7 @@
         "The model does not receive broad direct write credentials",
         "Authorization and critical validation are outside the prompt/model",
         "High-impact compensation changes require an explicit authority/approval boundary",
-        "The design includes auditability and AI/tool safety evals"
+        "The design includes auditability, recovery, and AI/tool safety evals"
       ]
     },
     {
@@ -47,7 +47,7 @@
     {
       "id": 5,
       "prompt": "Use Teaching Mode to teach me how an existing online marketplace works. Do not show the finished architecture immediately; unfold the graph gradually so I understand why every major part exists.",
-      "expected_output": "A progressive explanation that starts with purpose and actors, then incrementally adds boundary, flows, rules, dependencies, failure modes, feedback, trade-offs, and the target/current system graph.",
+      "expected_output": "A progressive explanation that starts with purpose and actors, then incrementally adds boundary, flows, decisions, capacity/dependencies, controls, verification, feedback, and recovery/adaptation.",
       "assertions": [
         "The response does not lead with a dense unexplained final architecture",
         "Each stage preserves prior graph context and introduces a meaningful new layer",
@@ -58,11 +58,11 @@
     {
       "id": 6,
       "prompt": "Design a better employee onboarding operating process for a 500-person company. The current process involves People Ops, IT, the manager, payroll and the new hire. Do not assume this is a software-development problem.",
-      "expected_output": "A domain-appropriate business-process system design using roles, handoffs, decision rights, information, queues, controls, capacity, exception paths, feedback and ownership rather than forcing software architecture terminology.",
+      "expected_output": "A domain-appropriate system design using roles, handoffs, decision rights, information, queues, controls, capacity, exception paths, feedback and ownership rather than software-first terminology.",
       "assertions": [
         "The design uses business-process language rather than inventing APIs, microservices or databases without need",
-        "The system boundary, actors, handoffs, ownership and exception paths are explicit",
-        "The design examines delays, bottlenecks, controls and feedback metrics",
+        "The system boundary, actors, handoffs, ownership, states and exception paths are explicit",
+        "The design examines delays, bottlenecks, controls, capacity and feedback metrics",
         "Automation is proposed only where it improves a defined requirement or risk"
       ]
     },
@@ -75,6 +75,61 @@
         "The analysis considers queueing, capacity, handoffs and failure propagation",
         "Current-state and proposed-state graph elements are clearly distinguished",
         "Teaching Mode unfolds the reasoning progressively"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "We designed an employee onboarding process and every required task is completed before Day 1, but new hires still report they cannot be productive in their first week. Review whether the system is successful.",
+      "expected_output": "A review that distinguishes verification from validation and recognizes that process completion can satisfy implementation requirements while failing the intended outcome.",
+      "assertions": [
+        "The response explicitly distinguishes verification from validation",
+        "Task completion is not treated as sufficient evidence of system success",
+        "The response proposes outcome-level evidence such as Day-1/first-week readiness and identifies likely system causes",
+        "Recommendations connect changes to measurable validation criteria"
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "Our onboarding system has missed laptop setup for three hires because managers submit details late. Make it self-healing so this never happens again.",
+      "expected_output": "A bounded adaptive design that senses late input, detects risk early, uses pre-approved recovery/escalation paths, verifies recovery, and treats recurring lateness as evidence for governed process redesign rather than uncontrolled autonomy.",
+      "assertions": [
+        "The response defines a desired state and concrete early-warning signals",
+        "Automatic recovery is bounded, reversible or low-risk, and has explicit authority",
+        "The system escalates novel or high-impact conditions instead of silently changing policy",
+        "Recurring failure feeds a learning/redesign loop with verification after change"
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "Our API error rate rose above target. Let the system automatically rewrite its architecture and deploy whatever changes the AI thinks will fix it.",
+      "expected_output": "A refusal to equate self-healing with unrestricted autonomous redesign. The system should contain/recover within pre-approved actions and route structural changes through governed design, testing, verification and rollout.",
+      "assertions": [
+        "The response does not permit unrestricted autonomous architecture changes",
+        "It separates operational recovery from structural redesign",
+        "It requires an adaptation envelope with authority, blast-radius, reversibility and verification",
+        "Structural changes return to a governed change-design process"
+      ]
+    },
+    {
+      "id": 11,
+      "prompt": "A support team is missing SLA because tickets arrive at 140 per day while the team can resolve about 100 per day. The manager wants an AI agent to remind employees to work faster. Design the system improvement.",
+      "expected_output": "A capacity-aware system design that recognizes sustained demand above processing capacity as the primary structural issue and does not substitute motivational automation for capacity/flow redesign.",
+      "assertions": [
+        "The response identifies arrival rate greater than processing capacity as a structural constraint",
+        "It analyzes backlog/queue growth and options such as demand reduction, capacity, routing, prioritization or process improvement",
+        "It does not present reminders or AI pressure as the primary solution",
+        "It defines outcome and capacity measures for verification"
+      ]
+    },
+    {
+      "id": 12,
+      "prompt": "This system has been operating for six months. Exceptions, manual overrides and backlog have all increased, but there has been no major incident. Use System Health mode to decide what to do.",
+      "expected_output": "A drift-oriented health assessment that treats recurring exceptions, overrides and backlog growth as operational evidence, diagnoses before redesigning, recovers active issues where needed, and proposes governed adaptation.",
+      "assertions": [
+        "The response treats drift and recurring workarounds as system-health evidence even without a major incident",
+        "It distinguishes symptoms from likely systemic causes",
+        "It compares current behavior with intended outcomes/fitness criteria",
+        "It proposes the smallest evidence-backed adaptation and defines how to verify it"
       ]
     }
   ]
