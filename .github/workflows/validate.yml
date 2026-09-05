@@ -1,4 +1,4 @@
-name: Validate skill
+name: Validate skill and plugin
 
 on:
   push:
@@ -9,13 +9,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+
       - name: Project validation
         run: python scripts/validate_skill.py
+
       - name: Canonical model validation
         run: python scripts/validate_model.py model/system.example.json
+
       - name: Renderer smoke test
         run: |
           python scripts/render_system.py model/system.example.json --out /tmp/system-views.html
@@ -23,8 +27,11 @@ jobs:
           grep -q "AS-IS" /tmp/system-views.html
           grep -q "TARGET" /tmp/system-views.html
           grep -q "Adaptive loop" /tmp/system-views.html
+          grep -q "Granular build specification" /tmp/system-views.html
+
       - name: Install Agent Skills reference validator
         run: pip install skills-ref==0.1.1
+
       - name: Agent Skills specification validation
         run: |
           python - <<'PY'
@@ -39,7 +46,35 @@ jobs:
               raise SystemExit(1)
           print("Agent Skills validation passed.")
           PY
-      - name: Validate eval JSON
+
+      - name: Validate JSON artifacts
         run: |
           python -m json.tool evals/evals.json >/dev/null
           python -m json.tool evals/visual-daily-evals.json >/dev/null
+          python -m json.tool plugin/.codex-plugin/plugin.json >/dev/null
+          python -m json.tool plugin/.mcp.json >/dev/null
+          python -m json.tool plugin/package.json >/dev/null
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: plugin/package.json
+
+      - name: Install plugin dependencies
+        working-directory: plugin
+        run: npm install --no-audit --no-fund
+
+      - name: Type-check plugin server
+        working-directory: plugin
+        run: npm run check
+
+      - name: Build plugin server and React widget
+        working-directory: plugin
+        run: npm run build
+
+      - name: Verify plugin build artifacts
+        run: |
+          test -s plugin/web/dist/component.js
+          test -s plugin/server/dist/server.js
+          grep -q "System Design Architect" plugin/web/dist/component.js
