@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "system": {
     "id": "employee-onboarding",
     "name": "Employee Onboarding System",
@@ -15,14 +15,14 @@
     ]
   },
   "boundaries": [
-    {"id": "onboarding", "name": "Onboarding operating system", "stage": "as_is", "evidence": "observed"}
+    {"id": "onboarding", "name": "Onboarding operating system", "stage": "shared", "evidence": "observed"}
   ],
   "elements": [
-    {"id": "new-hire", "name": "New Hire", "kind": "actor", "stage": "as_is", "evidence": "observed"},
-    {"id": "manager", "name": "Manager", "kind": "actor", "stage": "as_is", "evidence": "observed"},
-    {"id": "people-ops", "name": "People Ops", "kind": "capability", "stage": "as_is", "evidence": "observed", "owner": "People Ops"},
-    {"id": "it", "name": "IT Provisioning", "kind": "capability", "stage": "as_is", "evidence": "observed", "owner": "IT"},
-    {"id": "payroll", "name": "Payroll Setup", "kind": "capability", "stage": "as_is", "evidence": "observed", "owner": "Payroll"},
+    {"id": "new-hire", "name": "New Hire", "kind": "actor", "stage": "shared", "evidence": "observed"},
+    {"id": "manager", "name": "Manager", "kind": "actor", "stage": "shared", "evidence": "observed"},
+    {"id": "people-ops", "name": "People Ops", "kind": "capability", "stage": "shared", "evidence": "observed", "owner": "People Ops"},
+    {"id": "it", "name": "IT Provisioning", "kind": "capability", "stage": "shared", "evidence": "observed", "owner": "IT"},
+    {"id": "payroll", "name": "Payroll Setup", "kind": "capability", "stage": "shared", "evidence": "observed", "owner": "Payroll"},
     {"id": "readiness", "name": "Day-1 Readiness Check", "kind": "control", "stage": "target", "evidence": "proposed", "owner": "People Ops"},
     {"id": "late-input-queue", "name": "Late Manager Input Queue", "kind": "queue", "stage": "target", "evidence": "proposed", "owner": "People Ops"}
   ],
@@ -31,7 +31,8 @@
     {"id": "f2", "from": "people-ops", "to": "it", "type": "work", "label": "Provision access and equipment", "stage": "as_is", "evidence": "observed"},
     {"id": "f3", "from": "people-ops", "to": "payroll", "type": "information", "label": "Payroll-ready hire data", "stage": "as_is", "evidence": "observed"},
     {"id": "f4", "from": "manager", "to": "late-input-queue", "type": "information", "label": "Late/missing manager input", "stage": "target", "evidence": "proposed"},
-    {"id": "f5", "from": "late-input-queue", "to": "readiness", "type": "feedback", "label": "At-risk readiness signal", "stage": "target", "evidence": "proposed"}
+    {"id": "f5", "from": "late-input-queue", "to": "readiness", "type": "feedback", "label": "At-risk readiness signal", "stage": "target", "evidence": "proposed"},
+    {"id": "f6", "from": "readiness", "to": "people-ops", "type": "feedback", "label": "Readiness status", "stage": "target", "evidence": "proposed"}
   ],
   "risks": [
     {"id": "r1", "name": "Late manager data blocks laptop setup", "severity": "high", "stage": "as_is", "affects": ["manager", "it", "new-hire"], "cause": "manager details arrive too late", "control": "T-10 readiness checkpoint", "recovery": "route to exception queue and escalate"}
