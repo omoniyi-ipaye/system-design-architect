@@ -1,0 +1,48 @@
+{
+  "skill_name": "system-design-architect",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Design a 30-user internal CRUD tool for tracking office equipment. It has no sensitive data and normal business-hour availability is fine.",
+      "expected_output": "A lightweight design that prefers a simple application and avoids unjustified distributed infrastructure.",
+      "assertions": [
+        "The design does not introduce Kafka or an event bus without a concrete requirement",
+        "The design does not default to microservices or Kubernetes",
+        "The architecture depth is calibrated as Lightweight or equivalently low-complexity",
+        "The output includes assumptions instead of inventing precise scale targets"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Design a platform that durably processes 10 million independent events per hour, needs multiple independently deployable consumers, and must replay seven days of events.",
+      "expected_output": "A design that recognizes durable asynchronous/event infrastructure may be justified and explains its semantics and trade-offs.",
+      "assertions": [
+        "The design justifies asynchronous durable messaging from explicit requirements",
+        "The design defines delivery/idempotency and replay semantics",
+        "The design addresses backpressure and consumer failure",
+        "The recommendation includes trade-offs rather than naming technology only"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Build an AI employee assistant that can update compensation records when employees ask in natural language.",
+      "expected_output": "A high-assurance AI design that refuses direct model-to-HRIS privileged writes and inserts deterministic authorization/policy controls and approval where appropriate.",
+      "assertions": [
+        "The model does not receive broad direct write credentials",
+        "Authorization and critical validation are outside the prompt/model",
+        "High-impact compensation changes require an explicit authority/approval boundary",
+        "The design includes auditability and AI/tool safety evals"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "I have 80 structured product records in Postgres and need exact filtered lookup plus a natural-language explanation. Design it.",
+      "expected_output": "A simple structured-query architecture that does not add RAG or a vector database without need.",
+      "assertions": [
+        "The design prefers structured database lookup for exact records",
+        "The design does not add a vector database merely because an LLM is present",
+        "The LLM role is limited to interpretation/explanation where useful"
+      ]
+    }
+  ]
+}
