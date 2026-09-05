@@ -1,0 +1,50 @@
+{
+  "skill_name": "system-design-architect",
+  "suite": "visual-first-daily-use",
+  "evals": [
+    {
+      "id": "visual-1",
+      "prompt": "Design a new employee onboarding system for a 500-person company. Give me the complete recommendation.",
+      "expected_output": "A visual-first end-to-end design that shows a system/boundary or flow view early, then traces ownership, handoffs, state, capacity, controls, outcome validation and the operating loop.",
+      "assertions": [
+        "A meaningful system view appears before a long report-style explanation",
+        "The response traces the process end to end rather than optimizing one task in isolation",
+        "The target design visually exposes ownership, handoffs and important exception paths",
+        "The response includes verification/validation and health/adaptation criteria"
+      ]
+    },
+    {
+      "id": "visual-2",
+      "prompt": "Review this existing customer-support operation and improve it. Tickets are triaged, assigned, solved and closed, but backlog and escalations are rising.",
+      "expected_output": "An AS-IS-first visual review with a critical flow, bottleneck/risk overlay, target view and transition rather than a target-only prose redesign.",
+      "assertions": [
+        "The response reconstructs and labels an AS-IS system view before proposing TARGET",
+        "Backlog, capacity, escalation and handoff weaknesses are placed in the relevant system flow",
+        "CURRENT and TARGET states are not silently mixed",
+        "The response ends with a transition and operating health loop"
+      ]
+    },
+    {
+      "id": "visual-3",
+      "prompt": "We only want to automate the manager approval step in our procurement process. Design the change.",
+      "expected_output": "A focused change design that answers the requested component while checking material upstream and downstream consequences end to end.",
+      "assertions": [
+        "The response does not redesign unrelated procurement areas",
+        "It shows the affected current-system slice and proposed change visually",
+        "It checks authority, state transition, downstream handoff, audit and exception consequences",
+        "The response identifies assumptions instead of forcing a full requirements interview"
+      ]
+    },
+    {
+      "id": "visual-4",
+      "prompt": "Our restaurant dinner service is slow. Explain what is happening and what to change.",
+      "expected_output": "A domain-appropriate visual system explanation using service flow, queues/capacity and possibly feedback views, not software architecture vocabulary or prose-only advice.",
+      "assertions": [
+        "A service/process system view appears early",
+        "The analysis traces host to server to kitchen to runner to table end to end",
+        "Queues, capacity and handoffs are shown where they occur",
+        "The target design and measurement loop are visually or structurally explicit"
+      ]
+    }
+  ]
+}

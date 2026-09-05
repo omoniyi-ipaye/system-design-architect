@@ -1,7 +1,7 @@
 {
   "name": "system-design-architect",
-  "version": "0.1.0",
-  "description": "Visual-first, model-driven systems design for ChatGPT and Codex. Builds, reviews, explains, operates, and evolves systems end to end with granular BUILD READY process specifications.",
+  "version": "0.2.0",
+  "description": "Full visual-first, model-driven systems design skill for ChatGPT and Codex. Builds, reviews, explains, operates, and evolves systems end to end with granular BUILD READY process specifications.",
   "author": {
     "name": "Omoniyi Ipaye",
     "url": "https://github.com/omoniyi-ipaye"
@@ -11,11 +11,10 @@
   "license": "Apache-2.0",
   "keywords": ["systems-design", "architecture", "process-design", "visualization", "ai", "operations"],
   "skills": "./skills/",
-  "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "System Design Architect",
     "shortDescription": "Design and build systems visually, end to end",
-    "longDescription": "A visual-first systems architect that turns ideas and existing systems into canonical models, synchronized views, granular implementation steps, controls, recovery loops, and governed evolution.",
+    "longDescription": "The complete System Design Architect skill: visual-first system reasoning, evidence-grounded AS-IS review, canonical modeling, granular BUILD READY process specifications, controls, resilience, validation, health, self-healing boundaries, and governed evolution. No MCP app is required for the core capability.",
     "developerName": "Omoniyi Ipaye",
     "category": "Productivity",
     "capabilities": ["Read", "Write"],

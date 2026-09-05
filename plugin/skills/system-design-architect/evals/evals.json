@@ -1,0 +1,136 @@
+{
+  "skill_name": "system-design-architect",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Design a 30-user internal CRUD tool for tracking office equipment. It has no sensitive data and normal business-hour availability is fine.",
+      "expected_output": "A lightweight design that prefers a simple application and avoids unjustified distributed infrastructure.",
+      "assertions": [
+        "The design does not introduce Kafka or an event bus without a concrete requirement",
+        "The design does not default to microservices or Kubernetes",
+        "The architecture depth is calibrated as Lightweight or equivalently low-complexity",
+        "The output includes assumptions instead of inventing precise scale targets"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Design a platform that durably processes 10 million independent events per hour, needs multiple independently deployable consumers, and must replay seven days of events.",
+      "expected_output": "A design that recognizes durable asynchronous/event infrastructure may be justified and explains its semantics and trade-offs.",
+      "assertions": [
+        "The design justifies asynchronous durable messaging from explicit requirements",
+        "The design defines delivery/idempotency and replay semantics",
+        "The design addresses backpressure and consumer failure",
+        "The recommendation includes trade-offs rather than naming technology only"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Build an AI employee assistant that can update compensation records when employees ask in natural language.",
+      "expected_output": "A high-assurance AI design that refuses direct model-to-HRIS privileged writes and inserts deterministic authorization/policy controls and approval where appropriate.",
+      "assertions": [
+        "The model does not receive broad direct write credentials",
+        "Authorization and critical validation are outside the prompt/model",
+        "High-impact compensation changes require an explicit authority/approval boundary",
+        "The design includes auditability, recovery, and AI/tool safety evals"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "I have 80 structured product records in Postgres and need exact filtered lookup plus a natural-language explanation. Design it.",
+      "expected_output": "A simple structured-query architecture that does not add RAG or a vector database without need.",
+      "assertions": [
+        "The design prefers structured database lookup for exact records",
+        "The design does not add a vector database merely because an LLM is present",
+        "The LLM role is limited to interpretation/explanation where useful"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Use Teaching Mode to teach me how an existing online marketplace works. Do not show the finished architecture immediately; unfold the graph gradually so I understand why every major part exists.",
+      "expected_output": "A progressive explanation that starts with purpose and actors, then incrementally adds boundary, flows, decisions, capacity/dependencies, controls, verification, feedback, and recovery/adaptation.",
+      "assertions": [
+        "The response does not lead with a dense unexplained final architecture",
+        "Each stage preserves prior graph context and introduces a meaningful new layer",
+        "Each stage explains why the new elements exist and a failure or mistake to watch for",
+        "The explanation teaches causal relationships rather than only naming components"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Design a better employee onboarding operating process for a 500-person company. The current process involves People Ops, IT, the manager, payroll and the new hire. Do not assume this is a software-development problem.",
+      "expected_output": "A domain-appropriate system design using roles, handoffs, decision rights, information, queues, controls, capacity, exception paths, feedback and ownership rather than software-first terminology.",
+      "assertions": [
+        "The design uses business-process language rather than inventing APIs, microservices or databases without need",
+        "The system boundary, actors, handoffs, ownership, states and exception paths are explicit",
+        "The design examines delays, bottlenecks, controls, capacity and feedback metrics",
+        "Automation is proposed only where it improves a defined requirement or risk"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Review an existing restaurant service operation where customers wait too long at dinner. Orders flow from host to server to kitchen to runner to table. Teach me the current system first, then show how you would improve it.",
+      "expected_output": "A non-software existing-system review that reconstructs the as-is service flow, identifies queues, capacity constraints, handoff failures and feedback loops, then progressively teaches the target design.",
+      "assertions": [
+        "The response reconstructs the as-is system before proposing the target",
+        "The analysis considers queueing, capacity, handoffs and failure propagation",
+        "Current-state and proposed-state graph elements are clearly distinguished",
+        "Teaching Mode unfolds the reasoning progressively"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "We designed an employee onboarding process and every required task is completed before Day 1, but new hires still report they cannot be productive in their first week. Review whether the system is successful.",
+      "expected_output": "A review that distinguishes verification from validation and recognizes that process completion can satisfy implementation requirements while failing the intended outcome.",
+      "assertions": [
+        "The response explicitly distinguishes verification from validation",
+        "Task completion is not treated as sufficient evidence of system success",
+        "The response proposes outcome-level evidence such as Day-1/first-week readiness and identifies likely system causes",
+        "Recommendations connect changes to measurable validation criteria"
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "Our onboarding system has missed laptop setup for three hires because managers submit details late. Make it self-healing so this never happens again.",
+      "expected_output": "A bounded adaptive design that senses late input, detects risk early, uses pre-approved recovery/escalation paths, verifies recovery, and treats recurring lateness as evidence for governed process redesign rather than uncontrolled autonomy.",
+      "assertions": [
+        "The response defines a desired state and concrete early-warning signals",
+        "Automatic recovery is bounded, reversible or low-risk, and has explicit authority",
+        "The system escalates novel or high-impact conditions instead of silently changing policy",
+        "Recurring failure feeds a learning/redesign loop with verification after change"
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "Our API error rate rose above target. Let the system automatically rewrite its architecture and deploy whatever changes the AI thinks will fix it.",
+      "expected_output": "A refusal to equate self-healing with unrestricted autonomous redesign. The system should contain/recover within pre-approved actions and route structural changes through governed design, testing, verification and rollout.",
+      "assertions": [
+        "The response does not permit unrestricted autonomous architecture changes",
+        "It separates operational recovery from structural redesign",
+        "It requires an adaptation envelope with authority, blast-radius, reversibility and verification",
+        "Structural changes return to a governed change-design process"
+      ]
+    },
+    {
+      "id": 11,
+      "prompt": "A support team is missing SLA because tickets arrive at 140 per day while the team can resolve about 100 per day. The manager wants an AI agent to remind employees to work faster. Design the system improvement.",
+      "expected_output": "A capacity-aware system design that recognizes sustained demand above processing capacity as the primary structural issue and does not substitute motivational automation for capacity/flow redesign.",
+      "assertions": [
+        "The response identifies arrival rate greater than processing capacity as a structural constraint",
+        "It analyzes backlog/queue growth and options such as demand reduction, capacity, routing, prioritization or process improvement",
+        "It does not present reminders or AI pressure as the primary solution",
+        "It defines outcome and capacity measures for verification"
+      ]
+    },
+    {
+      "id": 12,
+      "prompt": "This system has been operating for six months. Exceptions, manual overrides and backlog have all increased, but there has been no major incident. Use System Health mode to decide what to do.",
+      "expected_output": "A drift-oriented health assessment that treats recurring exceptions, overrides and backlog growth as operational evidence, diagnoses before redesigning, recovers active issues where needed, and proposes governed adaptation.",
+      "assertions": [
+        "The response treats drift and recurring workarounds as system-health evidence even without a major incident",
+        "It distinguishes symptoms from likely systemic causes",
+        "It compares current behavior with intended outcomes/fitness criteria",
+        "It proposes the smallest evidence-backed adaptation and defines how to verify it"
+      ]
+    }
+  ]
+}
