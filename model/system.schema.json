@@ -20,23 +20,10 @@
         "constraints": {"type": "array", "items": {"$ref": "#/$defs/claim"}}
       }
     },
-    "boundaries": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": ["id", "name"],
-        "properties": {
-          "id": {"type": "string"},
-          "name": {"type": "string"},
-          "description": {"type": "string"},
-          "stage": {"$ref": "#/$defs/stage"},
-          "evidence": {"$ref": "#/$defs/evidence"}
-        }
-      },
-      "default": []
-    },
+    "boundaries": {"type": "array", "items": {"$ref": "#/$defs/boundary"}, "default": []},
     "elements": {"type": "array", "items": {"$ref": "#/$defs/element"}},
     "flows": {"type": "array", "items": {"$ref": "#/$defs/flow"}},
+    "process_steps": {"type": "array", "items": {"$ref": "#/$defs/process_step"}, "default": []},
     "decisions": {"type": "array", "items": {"$ref": "#/$defs/decision"}, "default": []},
     "risks": {"type": "array", "items": {"$ref": "#/$defs/risk"}, "default": []},
     "capacity": {"type": "array", "items": {"$ref": "#/$defs/capacity"}, "default": []},
@@ -72,6 +59,7 @@
   "$defs": {
     "stage": {"enum": ["as_is", "transition", "target", "shared"]},
     "evidence": {"enum": ["observed", "assumed", "proposed", "unknown"]},
+    "automation": {"enum": ["manual", "deterministic", "ai_assisted", "bounded_autonomous"]},
     "claim": {
       "type": "object",
       "required": ["text", "evidence"],
@@ -81,43 +69,73 @@
         "source": {"type": "string"}
       }
     },
+    "boundary": {
+      "type": "object",
+      "required": ["id", "name"],
+      "properties": {
+        "id": {"type": "string"}, "name": {"type": "string"}, "description": {"type": "string"},
+        "stage": {"$ref": "#/$defs/stage"}, "evidence": {"$ref": "#/$defs/evidence"}
+      }
+    },
     "element": {
       "type": "object",
       "required": ["id", "name", "kind", "stage", "evidence"],
       "properties": {
-        "id": {"type": "string"},
-        "name": {"type": "string"},
+        "id": {"type": "string"}, "name": {"type": "string"},
         "kind": {"enum": ["actor", "capability", "process", "service", "system", "decision", "state", "resource", "queue", "control", "metric", "external", "device", "data_store"]},
-        "stage": {"$ref": "#/$defs/stage"},
-        "evidence": {"$ref": "#/$defs/evidence"},
-        "description": {"type": "string"},
-        "owner": {"type": "string"},
-        "boundary": {"type": "string"},
-        "source": {"type": "string"}
+        "stage": {"$ref": "#/$defs/stage"}, "evidence": {"$ref": "#/$defs/evidence"},
+        "description": {"type": "string"}, "owner": {"type": "string"}, "boundary": {"type": "string"}, "source": {"type": "string"}
       }
     },
     "flow": {
       "type": "object",
       "required": ["id", "from", "to", "type", "stage", "evidence"],
       "properties": {
-        "id": {"type": "string"},
-        "from": {"type": "string"},
-        "to": {"type": "string"},
+        "id": {"type": "string"}, "from": {"type": "string"}, "to": {"type": "string"},
         "type": {"enum": ["work", "information", "authority", "state", "money", "material", "resource", "feedback", "dependency"]},
-        "label": {"type": "string"},
-        "stage": {"$ref": "#/$defs/stage"},
-        "evidence": {"$ref": "#/$defs/evidence"},
+        "label": {"type": "string"}, "stage": {"$ref": "#/$defs/stage"}, "evidence": {"$ref": "#/$defs/evidence"},
         "handoff_contract": {
           "type": "object",
           "properties": {
-            "required_input": {"type": "string"},
-            "owner": {"type": "string"},
-            "acknowledgement": {"type": "string"},
-            "timing": {"type": "string"},
-            "failure_behavior": {"type": "string"},
-            "escalation": {"type": "string"}
+            "required_input": {"type": "string"}, "owner": {"type": "string"}, "acknowledgement": {"type": "string"},
+            "timing": {"type": "string"}, "failure_behavior": {"type": "string"}, "escalation": {"type": "string"}
           }
         }
+      }
+    },
+    "process_step": {
+      "type": "object",
+      "required": ["id", "name", "stage", "purpose", "trigger", "owner", "executor", "action", "state_before", "state_after", "outputs", "completion_evidence", "automation"],
+      "properties": {
+        "id": {"type": "string"},
+        "sequence": {"type": "integer"},
+        "name": {"type": "string"},
+        "stage": {"$ref": "#/$defs/stage"},
+        "purpose": {"type": "string"},
+        "trigger": {"type": "string"},
+        "preconditions": {"type": "array", "items": {"type": "string"}},
+        "inputs": {"type": "array", "items": {"type": "string"}},
+        "input_sources": {"type": "array", "items": {"type": "string"}},
+        "owner": {"type": "string"},
+        "executor": {"type": "string"},
+        "action": {"type": "string"},
+        "decision_rule": {"type": "string"},
+        "state_before": {"type": "string"},
+        "state_after": {"type": "string"},
+        "outputs": {"type": "array", "items": {"type": "string"}},
+        "downstream": {"type": "array", "items": {"type": "string"}},
+        "sla": {"type": "string"},
+        "control": {"type": "string"},
+        "completion_evidence": {"type": "string"},
+        "exceptions": {"type": "array", "items": {"type": "string"}},
+        "exception_route": {"type": "string"},
+        "recovery": {"type": "string"},
+        "escalation": {"type": "string"},
+        "automation": {"$ref": "#/$defs/automation"},
+        "audit_evidence": {"type": "string"},
+        "health_signal": {"type": "string"},
+        "verification": {"type": "string"},
+        "validation": {"type": "string"}
       }
     },
     "decision": {
@@ -133,8 +151,7 @@
       "type": "object",
       "required": ["id", "name", "severity", "stage"],
       "properties": {
-        "id": {"type": "string"}, "name": {"type": "string"},
-        "severity": {"enum": ["low", "medium", "high", "critical"]},
+        "id": {"type": "string"}, "name": {"type": "string"}, "severity": {"enum": ["low", "medium", "high", "critical"]},
         "stage": {"$ref": "#/$defs/stage"}, "affects": {"type": "array", "items": {"type": "string"}},
         "cause": {"type": "string"}, "control": {"type": "string"}, "recovery": {"type": "string"}
       }
