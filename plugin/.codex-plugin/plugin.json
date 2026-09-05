@@ -1,0 +1,29 @@
+{
+  "name": "system-design-architect",
+  "version": "0.1.0",
+  "description": "Visual-first, model-driven systems design for ChatGPT and Codex. Builds, reviews, explains, operates, and evolves systems end to end with granular BUILD READY process specifications.",
+  "author": {
+    "name": "Omoniyi Ipaye",
+    "url": "https://github.com/omoniyi-ipaye"
+  },
+  "homepage": "https://github.com/omoniyi-ipaye/system-design-architect",
+  "repository": "https://github.com/omoniyi-ipaye/system-design-architect",
+  "license": "Apache-2.0",
+  "keywords": ["systems-design", "architecture", "process-design", "visualization", "ai", "operations"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "System Design Architect",
+    "shortDescription": "Design and build systems visually, end to end",
+    "longDescription": "A visual-first systems architect that turns ideas and existing systems into canonical models, synchronized views, granular implementation steps, controls, recovery loops, and governed evolution.",
+    "developerName": "Omoniyi Ipaye",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "websiteURL": "https://github.com/omoniyi-ipaye/system-design-architect",
+    "defaultPrompt": [
+      "Use System Design Architect to build this system end to end and show it visually.",
+      "Review this existing system, reconstruct AS-IS first, then produce TARGET and BUILD READY implementation steps.",
+      "Use System Health mode to diagnose drift and design bounded recovery and adaptation."
+    ]
+  }
+}
