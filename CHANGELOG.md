@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.1.0 - 2026-09-05
+- Make **visual-first** behavior part of the core execution contract rather than optional diagram guidance.
+- Add `references/visual-first.md` with view-selection, layering, evidence, AS-IS/TARGET, and visual quality rules.
+- Add `references/daily-use.md` with a practical daily session loop: classify → inspect evidence → show first view → trace end to end → expose weak points → target → transition → verify/validate → health loop.
+- Refactor `SKILL.md` into a shorter execution contract optimized for daily agent behavior while moving depth into references.
+- Add an explicit end-to-end completeness lens covering purpose, ownership, decisions, state/resources, multi-flow analysis, handoffs, dependencies, capacity, controls, failure/recovery, validation, feedback and adaptation.
+- Add `templates/SYSTEM_VIEW_PACK.md` for reusable visual dossiers.
+- Rewrite diagramming guidance as domain-neutral system visualization rather than software-only architecture diagrams.
+- Add visual-model quality and end-to-end completeness to the system review matrix.
+- Add `evals/visual-daily-evals.json` to protect visual-first, AS-IS-first, focused-change, and domain-appropriate behavior.
+- Strengthen repository validation so visual-first/end-to-end regressions fail CI.
+- Add systems-mapping, causal-loop, service-blueprint and MBSE sources to methodology grounding.
+- Refresh README around visual-first daily workflows.
+
 ## 2.0.0 - 2026-09-05
 - Make domain-neutral systems design the core identity of the skill rather than an extension to software architecture.
 - Add a universal lifecycle: purpose → design → verify/validate → operate → sense → detect → diagnose → respond → recover → verify → learn → adapt.
