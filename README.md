@@ -1,176 +1,206 @@
 # System Design Architect
 
-A vendor-neutral **Agent Skill** for designing, reviewing, explaining, and evolving complex systems before implementation or change.
+A vendor-neutral **Agent Skill** for designing, building, reviewing, operating, and evolving well-grounded systems in any domain.
 
-It began as a software-architecture skill. From v1.2 it is intentionally broader: a **system** can be software, an AI agent, a business process, an operating model, a service, a smart environment, a supply chain, a learning system, or another network of interacting parts organized around an outcome.
+A system can be software, an AI agent, a business process, an operating model, a customer service, a smart environment, a supply chain, a learning system, a physical operation, or another network of interacting elements organized around an outcome.
 
-## What makes it different
+System Design Architect does not stop at a launch diagram or process map. It helps answer:
 
-System Design Architect combines three independent choices:
+1. **Why does the system exist?**
+2. **How should it work?**
+3. **How will we know it actually works?**
+4. **How will it stay healthy, recover, learn, and improve over time?**
 
-### Lifecycle mode
-- **New System Design** — start from an idea or desired outcome.
-- **Existing System Review** — reconstruct the as-is system from evidence before recommending change.
-- **Change Design** — understand the relevant current system before adding a new capability.
-
-### Domain lens
-- **Software / digital** — services, APIs, data, identity, infrastructure, reliability, deployment.
-- **General systems** — actors, handoffs, resources, decision rights, capacity, controls, feedback, resilience, outcomes.
-
-### Presentation mode
-- **Architect Mode** — produce the design/review efficiently.
-- **Teaching Mode** — progressively unfold a system graph so the learner understands why every major part exists.
-
-## Teaching Mode
-
-Instead of showing a dense final diagram first, Teaching Mode unfolds the system in stages:
+## v2 core lifecycle
 
 ```text
-Purpose / outcome
+Purpose / Outcome
       ↓
-Actors / stakeholders
+Boundary + Stakeholders
       ↓
-Boundary / environment
+Needs + Requirements
       ↓
-Inputs, resources, outputs
+Actors + Decisions + State / Resources
       ↓
-Core flow
+Flows + Interfaces / Handoffs
       ↓
-Rules / decisions
+Capacity + Dependencies + Risks
       ↓
-Dependencies / interfaces
+Design Options + Controls
       ↓
-Failure modes / constraints
+Resilience + Recovery
       ↓
-Feedback / measurement
+Verify + Validate
       ↓
-Options / trade-offs
+Operate + Measure
       ↓
-Target system
+Sense + Detect Drift
       ↓
-Transition / implementation
+Diagnose + Respond
+      ↓
+Recover + Verify
+      ↓
+Learn + Adapt
+      └──────────────↺
 ```
 
-At each stage the skill preserves the previous graph, adds only the new layer, explains **why it matters**, gives an example, identifies a common failure, and connects the stage to the next design question.
+The goal is a system that is **grounded at design time and governably adaptive at run time**.
 
-For existing systems, it unfolds the **as-is graph first**, then the findings, then the **target graph**. Observed and proposed state are never silently mixed.
+## What “self-healing” means here
 
-See [`references/teaching-mode.md`](references/teaching-mode.md).
+Self-healing does **not** mean unrestricted autonomous redesign.
 
-## Beyond software
+The skill distinguishes four levels:
 
-The same systems discipline applies across many fields when the vocabulary is adapted correctly.
+- **L0 Observable** — detect degradation and surface it.
+- **L1 Assisted recovery** — recommend a corrective action; a human executes.
+- **L2 Bounded auto-heal** — automatically execute pre-approved, reversible recovery actions.
+- **L3 Governed adaptive optimization** — adjust routing, capacity, scheduling, configuration, or process parameters inside a defined adaptation envelope.
+
+The system must not silently rewrite its own purpose, critical policies, authority model, safety boundaries, or sources of truth. Structural adaptation returns to the normal design → verification → validation loop.
+
+See [`references/adaptive-systems.md`](references/adaptive-systems.md).
+
+## Four lifecycle modes
+
+### New System Design
+Start from an idea, need, desired outcome, new process, product, service, or operating model.
+
+### Existing System Review
+Reconstruct the as-is system from evidence before recommending change.
+
+### Change Design
+Understand the relevant current system before adding or modifying a significant capability.
+
+### Adaptive Operation / System Health
+Use operational evidence to diagnose drift, incidents, recurring exceptions, bottlenecks, poor metrics, weak controls, or resilience gaps; recover first, then adapt safely.
+
+## Domain lenses
+
+### Software / digital
+Services, APIs, events, data/state, identity/security, infrastructure, deployment, reliability, observability, scale.
+
+### General systems
+Actors, responsibilities, handoffs, resources/information/state, decision rights, policies, capacity, queues, controls, feedback, resilience, outcomes.
+
+The skill does **not** force software concepts onto business or physical systems.
 
 Examples:
-- employee onboarding and People Operations
+- People Operations and employee onboarding
 - organizational operating models
+- procurement / finance approvals
 - customer-service operations
-- restaurant or hospitality service flow
+- restaurant / hospitality flow
 - logistics and supply chains
-- smart-home / building systems
-- manufacturing or physical operations
+- manufacturing and physical operations
+- smart homes / buildings
 - learning and education systems
-- finance or approval processes
 - public/service-delivery workflows
-
-The skill does **not** force APIs, databases, microservices, or software security concepts onto these problems. It translates them into the domain's real building blocks: roles, capabilities, handoffs, records/resources, queues, decision rights, controls, capacity, failure recovery, measurement, and feedback loops.
+- software, APIs, AI and agent platforms
 
 See [`references/domain-neutral-systems.md`](references/domain-neutral-systems.md).
 
-## Why this exists
+## Teaching Mode
 
-AI tools make it extremely easy to jump from an idea to a solution before the purpose, system boundary, ownership, failure modes, feedback loops, trust/control boundaries, or trade-offs are understood.
+Teaching is a presentation mode, not the purpose of the skill. When useful, it progressively unfolds the system graph so the learner understands causality rather than memorizing a finished diagram.
 
-System Design Architect inserts disciplined reasoning between **idea/current system** and **implementation/change**:
+Typical progression:
 
 ```text
-Idea / Existing System
-        ↓
-Purpose + Boundary
-        ↓
-Actors + Requirements
-        ↓
-State / Resources + Flows
-        ↓
-Dependencies + Risks
-        ↓
-Options + System Views
-        ↓
-Controls + Resilience
-        ↓
-Feedback + Measurement
-        ↓
-Decisions + Fitness Checks
-        ↓
-Implementation / Transition
+Purpose
+  ↓
+Actors
+  ↓
+Boundary
+  ↓
+State / Resources / Inputs / Outputs
+  ↓
+Flows + Decisions + Interfaces
+  ↓
+Capacity + Dependencies
+  ↓
+Controls + Failure Modes
+  ↓
+Verification + Validation
+  ↓
+Health Signals + Feedback
+  ↓
+Recovery + Self-Healing Loop
+  ↓
+Target + Transition / Adaptation
 ```
 
-The skill is intentionally opinionated about **simplicity**. It challenges unnecessary infrastructure, automation, handoffs, approvals, agents, process ceremony, and organizational complexity when the requirements do not justify them.
+See [`references/teaching-mode.md`](references/teaching-mode.md).
 
 ## Core principles
 
-- Start with the outcome, not the technology or fashionable framework.
-- Distinguish **Observed / Assumed / Proposed**.
+- Start with system-level outcomes, not technology or process ceremony.
+- Distinguish **Observed / Assumed / Proposed / Unknown**.
 - Establish the system boundary.
 - Make ownership and decision rights explicit.
-- Map flows, handoffs, state/resources, dependencies, and exception paths.
+- Trace work, information, authority, state, and resource flows when relevant.
+- Treat interfaces and handoffs as contracts.
+- Understand demand, capacity, queues, bottlenecks, and rework.
 - Treat dependencies as fallible.
-- Design controls and recovery, not only the happy path.
-- Examine capacity, bottlenecks, and failure propagation.
-- Make feedback loops and measures explicit.
-- Prefer reversible, evolutionary change.
-- Record significant decisions and trade-offs.
-- Test important architectural/system claims with fitness checks.
-- For AI: models can interpret and propose; deterministic controls must enforce critical permissions and side effects.
+- Design controls, recovery, and exception paths—not only the happy path.
+- Distinguish **verification** (built correctly) from **validation** (right system / desired outcome achieved).
+- Prefer whole-system metrics over local metrics that reward harmful optimization.
+- Design sensing and feedback before claiming a system is adaptive.
+- Bound self-healing autonomy with authority, reversibility, blast-radius, and escalation rules.
+- Prefer evolutionary, reversible change.
+- For AI: probabilistic models interpret/propose; deterministic controls enforce critical permissions and invariants.
 
 ## Example prompts
 
+### Build a business system
+```text
+Use System Design Architect to design our employee onboarding system from first principles. I want a production-grade process with clear ownership, handoffs, states, exception recovery, capacity assumptions, outcome measures, and a bounded self-healing loop.
+```
+
+### Review an existing operation
+```text
+Review our current restaurant dinner-service system. Reconstruct the as-is flow and operational evidence first. Identify queues, handoff failures, capacity constraints, feedback loops, and recovery gaps. Then design the smallest target system and operating loop.
+```
+
 ### Software
 ```text
-Use System Design Architect. I want to build a family budget app that imports bank CSVs and categorizes expenses with AI.
+Design a family budget application. Ground the architecture before implementation, define data ownership, failure/recovery behavior, fitness checks, observability, and the safe adaptation loop.
 ```
 
-### Existing repository
+### AI system
 ```text
-Review this repository. Reconstruct the current architecture from evidence first, identify the highest-risk issues, then give me the smallest useful evolutionary target architecture.
+Design an AI employee assistant that can take selected actions. Define model vs deterministic responsibilities, tool permissions, approvals, grounding, evals, drift monitoring, recovery, and its autonomy envelope.
 ```
 
-### Teaching Mode
+### System health
 ```text
-Use Teaching Mode. Teach me how this marketplace works by unfolding the system graph one stage at a time. Do not show me the finished architecture first.
-```
-
-### Business process
-```text
-Design our employee onboarding operating system. Treat People Ops, IT, payroll, managers and new hires as actors in a business system. Do not assume this is primarily a software problem.
-```
-
-### Existing non-software system
-```text
-Review our restaurant dinner-service operation. Reconstruct the as-is flow, queues and handoffs first, then teach me why the bottlenecks happen and progressively show the target system.
+This system has been running for six months and exceptions are increasing. Use System Health mode: compare actual behavior to intended outcomes, diagnose drift, propose safe recovery and adaptation, and identify what requires full redesign.
 ```
 
 ## Methodology
 
-The skill combines:
-- systems thinking and feedback-loop analysis
-- Well-Architected quality lenses
-- C4-style software architecture views where applicable
-- Architecture/System Decision Records
-- evidence-grounded existing-system discovery
-- data consistency and transaction reasoning
-- reliability/resilience and failure-mode design
-- security/privacy/governance controls
-- AI/agent grounding, autonomy, tool mediation and evals
-- architecture/system fitness checks
-- progressive teaching
+The skill synthesizes:
+- systems thinking and systems engineering;
+- process and service design;
+- requirements, interfaces, verification and validation;
+- capacity and flow analysis;
+- reliability / resilience engineering;
+- adaptive and bounded self-healing systems;
+- Well-Architected quality lenses;
+- C4 views for software where appropriate;
+- Architecture / System Decision Records;
+- security, privacy, safety and governance controls;
+- AI/agent risk, grounding, autonomy and evals;
+- architecture/system fitness checks;
+- progressive teaching when requested.
 
 See [`references/sources.md`](references/sources.md).
 
-## Important references
+## Key references
 
 - [`references/process.md`](references/process.md)
 - [`references/domain-neutral-systems.md`](references/domain-neutral-systems.md)
+- [`references/adaptive-systems.md`](references/adaptive-systems.md)
 - [`references/teaching-mode.md`](references/teaching-mode.md)
 - [`references/discovery.md`](references/discovery.md)
 - [`references/data-systems.md`](references/data-systems.md)
@@ -178,48 +208,51 @@ See [`references/sources.md`](references/sources.md).
 - [`references/security.md`](references/security.md)
 - [`references/ai-systems.md`](references/ai-systems.md)
 - [`references/architecture-fitness.md`](references/architecture-fitness.md)
-
-## Examples
-
-- [`examples/new-ai-hr-assistant.md`](examples/new-ai-hr-assistant.md)
-- [`examples/existing-agent-review.md`](examples/existing-agent-review.md)
-- [`examples/non-software-employee-onboarding-system.md`](examples/non-software-employee-onboarding-system.md)
+- [`references/review-matrix.md`](references/review-matrix.md)
 
 ## Templates
 
 - [`templates/DESIGN.md`](templates/DESIGN.md)
 - [`templates/ARCHITECTURE_REVIEW.md`](templates/ARCHITECTURE_REVIEW.md)
+- [`templates/ADAPTIVE_OPERATING_LOOP.md`](templates/ADAPTIVE_OPERATING_LOOP.md)
 - [`templates/ADR.md`](templates/ADR.md)
 - [`templates/THREAT_MODEL.md`](templates/THREAT_MODEL.md)
 - [`templates/FITNESS_CHECKS.md`](templates/FITNESS_CHECKS.md)
 
-## Validation and evals
+Create a dossier:
 
-Run the local project validator:
+```bash
+python scripts/scaffold.py "My System" --out ./system-design
+```
+
+## Validation and evals
 
 ```bash
 python scripts/validate_skill.py
 ```
 
-CI also runs the Agent Skills reference validator and validates `evals/evals.json`.
+CI also runs the Agent Skills reference validator and validates [`evals/evals.json`](evals/evals.json).
 
-The eval suite tests, among other behaviors, whether the skill:
-- avoids unjustified distributed architecture;
-- recognizes when high-scale event infrastructure is justified;
-- protects privileged AI actions;
-- avoids unnecessary RAG/vector databases;
-- teaches progressively rather than dumping an unexplained final graph;
-- uses domain-appropriate language for non-software systems;
-- reconstructs existing non-software systems before proposing change.
+The eval suite checks whether the skill:
+- resists unjustified technical/process complexity;
+- adapts vocabulary to non-software domains;
+- reconstructs existing systems before redesign;
+- distinguishes verification from validation;
+- identifies demand/capacity/queue issues;
+- designs bounded recovery instead of uncontrolled “self-healing”;
+- escalates novel/high-impact failures;
+- recognizes recurring drift as evidence for governed redesign;
+- protects high-impact AI actions;
+- teaches progressively when requested.
 
 ## License
 
 Apache License 2.0. See [`LICENSE`](LICENSE).
 
-## Contributing
-
-Contributions are welcome, particularly new domain lenses, progressive-teaching examples, system-review cases, failure-mode patterns, and eval scenarios. See [`CONTRIBUTING.md`](CONTRIBUTING.md).
-
 ## Versioning
 
-The project follows semantic versioning for skill behavior and methodology. See [`CHANGELOG.md`](CHANGELOG.md).
+The project uses semantic versioning. **v2.0.0** makes adaptive, domain-neutral systems design the core methodology rather than an extension to software architecture. See [`CHANGELOG.md`](CHANGELOG.md).
+
+## Contributing
+
+Contributions are welcome, especially domain lenses, system-health cases, resilience patterns, process/operating-model examples, self-healing guardrails, verification/validation examples, and eval scenarios. See [`CONTRIBUTING.md`](CONTRIBUTING.md).
