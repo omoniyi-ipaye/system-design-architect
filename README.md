@@ -1,154 +1,159 @@
 # System Design Architect
 
-An open-source AI skill that grounds new and existing software systems in rigorous system design before implementation.
+A vendor-neutral **Agent Skill** that forces good system design *before coding* and helps existing systems evolve toward stronger architecture without reflexive rewrites.
 
-System Design Architect helps an AI coding assistant act like a disciplined software architect before it acts like an implementer. It can design greenfield systems, review existing architectures, evaluate proposed changes, challenge unnecessary complexity, and produce implementation-ready architecture decisions.
+It is designed for:
+- new software/product ideas
+- existing architecture reviews
+- AI and agent systems
+- APIs and integrations
+- workflow/automation systems
+- distributed systems
+- sensitive business systems
 
 ## Why this exists
 
-AI coding tools are very good at turning ideas into code quickly. That speed can also make it easy to skip the architectural work that should happen first: clarifying requirements, identifying system boundaries, deciding what must be deterministic, defining trust boundaries, planning failure modes, and understanding trade-offs.
+AI coding tools make it extremely easy to move from idea to implementation before the problem, trust boundaries, data ownership, failure semantics, or operational model are understood.
 
-This skill inserts a lightweight but rigorous architecture process before implementation.
-
-It is designed to be:
-
-- **Evidence-grounded** — distinguishes what is observed, assumed, and proposed.
-- **Complexity-aware** — applies only as much architecture as the system needs.
-- **AI-aware** — explicitly reviews agent autonomy, tool access, grounding, evaluation, and human approval.
-- **Security-aware** — treats authorization, trust boundaries, auditability, and least privilege as architecture concerns.
-- **Pragmatic** — prefers the simplest architecture that satisfies the requirements.
-- **Incremental** — improves existing systems without demanding unnecessary rewrites.
-- **Vendor-neutral** — works across clouds, frameworks, languages, and AI stacks.
-
-## What it does
-
-The skill supports three modes.
-
-### 1. New System Design
-
-Use when starting from an idea or requirements.
-
-Typical flow:
-
-1. Frame the problem.
-2. Identify actors, use cases, requirements, constraints, and assumptions.
-3. Calibrate architecture depth.
-4. Model the system context and critical flows.
-5. Define data ownership and system boundaries.
-6. Explore credible architecture options.
-7. Select and document the recommended architecture.
-8. Review security, reliability, operability, performance, cost, and AI-specific risks.
-9. Record significant decisions as ADRs.
-10. Produce implementation slices and a readiness decision.
-
-### 2. Existing System Review
-
-Use when a system or repository already exists.
-
-The skill reconstructs the as-is architecture from evidence, identifies concrete weaknesses, defines the smallest useful target architecture, and creates an incremental migration path.
-
-### 3. Change Design
-
-Use when adding a significant capability to an existing system.
-
-It first understands the relevant current architecture, then determines how the new capability should fit without destabilizing the system or creating unnecessary new infrastructure.
-
-## Core principles
-
-- Start with the problem, not the technology.
-- Prefer the simplest architecture that satisfies current requirements.
-- Separate domain logic from orchestration.
-- Treat external dependencies as unreliable.
-- Make failure paths explicit.
-- Treat security boundaries as architectural, not prompt-based.
-- Require authorization, validation, auditability, and idempotency for side effects where appropriate.
-- Let LLMs interpret; let deterministic systems enforce invariants.
-- Give agents narrow tools rather than broad production credentials.
-- Do not introduce infrastructure without explaining the requirement it satisfies.
-- Record important trade-offs and architecture decisions.
-- Evolve existing systems incrementally where possible.
-
-## Repository structure
+System Design Architect inserts an architecture discipline between **idea** and **build**:
 
 ```text
-system-design-architect/
-├── SKILL.md
-├── README.md
-├── LICENSE
-├── CONTRIBUTING.md
-├── CODE_OF_CONDUCT.md
-├── references/
-│   ├── process.md
-│   ├── ai-systems.md
-│   ├── security.md
-│   ├── diagramming.md
-│   ├── review-matrix.md
-│   └── sources.md
-├── templates/
-│   ├── DESIGN.md
-│   ├── ARCHITECTURE_REVIEW.md
-│   └── ADR.md
-├── examples/
-│   ├── new-ai-hr-assistant.md
-│   └── existing-agent-review.md
-├── scripts/
-│   ├── scaffold.py
-│   └── validate_skill.py
-└── .github/workflows/
-    └── validate.yml
+Idea / Existing System
+        ↓
+Requirements + Constraints
+        ↓
+Risk + Data + Domain
+        ↓
+Architecture Options
+        ↓
+Security + Reliability + AI Gates
+        ↓
+Trade-offs + ADRs
+        ↓
+Implementation / Migration Slices
+        ↓
+Build
 ```
 
-## Quick start
+The skill is intentionally opinionated about **simplicity**. It challenges unnecessary microservices, queues, event buses, vector databases, multi-agent systems, and other infrastructure when the requirements do not justify them.
 
-The core skill is `SKILL.md`. Install or copy this repository into any AI environment that supports the Agent Skills format.
+## Methodology
 
-To create a local architecture dossier for a new system:
+The skill synthesizes four complementary bodies of practice:
+
+1. **Well-Architected quality lenses** — operational excellence, security, reliability, performance, cost, sustainability.
+2. **C4-style architecture communication** — context, container, component, dynamic, and deployment views only when useful.
+3. **Architecture Decision Records (ADRs)** — explicit decisions, alternatives, consequences, and reconsideration triggers.
+4. **AI/agent design controls** — model necessity, grounding, tool mediation, least privilege, prompt-injection boundaries, human approval, evals, and durable state ownership.
+
+See [`references/sources.md`](references/sources.md).
+
+## Install / use
+
+Agent Skills-compatible tools can install or point to this directory as a skill. The required file is [`SKILL.md`](SKILL.md).
+
+For tools that do not implement Agent Skills, copy the `SKILL.md` instructions into the tool's reusable-agent/instructions mechanism and keep the `references/` directory available.
+
+### Example prompts
+
+```text
+Use System Design Architect. I want to build a family budget app that imports bank CSVs and categorizes expenses with AI.
+```
+
+```text
+Use System Design Architect to review this repository. Reconstruct the current architecture first, identify the highest-risk issues, then give me an evolutionary target architecture. Do not rewrite it just for cleanliness.
+```
+
+```text
+Use System Design Architect in Change Design mode. I want to add autonomous employee onboarding actions to this existing HR platform.
+```
+
+## What it produces
+
+Depending on complexity:
+- problem/scope definition
+- functional and non-functional requirements
+- evidence ledger: Observed / Assumed / Proposed
+- criticality and risk classification
+- domain/data ownership model
+- architecture options and recommendation
+- C4-style diagrams
+- critical sequence/data flows
+- API/tool/event boundary guidance
+- security/privacy review
+- failure and reliability design
+- scale/performance/cost analysis
+- AI grounding/tool/eval design
+- ADR candidates
+- implementation/migration slices
+- architecture readiness gate
+
+## Existing systems
+
+The skill uses an **as-is -> risks -> smallest target -> migration** approach. It explicitly avoids “rewrite syndrome.” Working behavior is preserved unless a rewrite is backed by evidence.
+
+## AI systems
+
+The skill enforces several architectural principles:
+
+- An LLM is not a source of truth.
+- Prompt text is not an authorization system.
+- Critical rules should be deterministic.
+- Privileged operations should pass through narrow tools/domain services.
+- Durable workflow state should live outside model context.
+- RAG is used only when retrieval is actually needed.
+- Multi-agent architecture must justify its added complexity.
+- Evals are part of system design, not a launch-afterthought.
+
+## Templates
+
+- [`templates/DESIGN.md`](templates/DESIGN.md)
+- [`templates/ARCHITECTURE_REVIEW.md`](templates/ARCHITECTURE_REVIEW.md)
+- [`templates/ADR.md`](templates/ADR.md)
+- [`templates/THREAT_MODEL.md`](templates/THREAT_MODEL.md)
+- [`templates/FITNESS_CHECKS.md`](templates/FITNESS_CHECKS.md)
+
+Create a new design dossier:
 
 ```bash
 python scripts/scaffold.py "My Product" --out ./architecture
 ```
 
-Validate the repository structure with:
+## Validation
+
+A dependency-free repository sanity check is included:
 
 ```bash
 python scripts/validate_skill.py
 ```
 
-## Example prompts
+CI also runs the official Agent Skills reference validator and validates `evals/evals.json`. The eval set intentionally checks that the skill avoids unjustified microservices, Kafka/event infrastructure, RAG/vector databases, and unsafe direct agent writes—and recognizes when those patterns are actually justified.
 
-```text
-I want to build a global employee onboarding platform with AI assistance.
-Design the system before we write code.
-```
-
-```text
-Review this repository as an existing system. Reconstruct its architecture from evidence,
-identify the highest-risk weaknesses, and propose the smallest useful migration plan.
-```
-
-```text
-We want to add an autonomous remediation agent to this platform.
-Design how it should fit into the existing architecture and define its safety boundaries.
-```
-
-## Design foundations
-
-The methodology is informed by established architecture and AI-risk practices, including:
-
-- AWS Well-Architected Framework
-- Google Cloud Well-Architected Framework
-- C4 model for software architecture visualization
-- Architecture Decision Records (ADRs)
-- NIST AI Risk Management Framework
-- OWASP guidance for LLM and agentic systems
-- The open Agent Skills specification
-
-See `references/sources.md` for source notes and links.
-
-## License
-
-Apache License 2.0. See `LICENSE`.
+For implementations that use the Agent Skills reference validator, you can additionally run the standard `skills-ref validate` command against the skill directory.
 
 ## Contributing
 
-Contributions are welcome. See `CONTRIBUTING.md`.
+Contributions are welcome, especially:
+- architecture review examples
+- failure-mode patterns
+- AI/agent eval patterns
+- security review improvements
+- clearer lightweight workflows
+
+Please see [`CONTRIBUTING.md`](CONTRIBUTING.md).
+
+## License
+
+Apache License 2.0. See [`LICENSE`](LICENSE).
+
+## Architecture fitness
+
+A design is not considered good merely because every section is filled in. For consequential requirements, the skill maps **requirement → architecture mechanism → verification → pass condition**. This turns architectural intent into something teams can test and preserve.
+
+## Versioning
+
+The project follows semantic versioning for the skill metadata. See `CHANGELOG.md` for behavior and methodology changes.
+
+## Security
+
+See `SECURITY.md` for vulnerability-reporting guidance.
