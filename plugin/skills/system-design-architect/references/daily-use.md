@@ -1,5 +1,19 @@
 # Daily-Use Operating Protocol
 
+## Contents
+
+- [Default session loop](#default-session-loop)
+- [Do not over-interrogate](#do-not-over-interrogate)
+- [End-to-end completeness lens](#end-to-end-completeness-lens)
+- [Narrow question, broad awareness](#narrow-question-broad-awareness)
+- [Evidence priority](#evidence-priority)
+- [Daily output pattern](#daily-output-pattern)
+- [Existing-system default](#existing-system-default)
+- [New-system default](#new-system-default)
+- [System-health default](#system-health-default)
+- [Daily artifact discipline](#daily-artifact-discipline)
+- [Stop condition](#stop-condition)
+
 This protocol defines how System Design Architect should behave in ordinary day-to-day use. The goal is to act like an end-to-end systems partner, not a report generator.
 
 ## Default session loop

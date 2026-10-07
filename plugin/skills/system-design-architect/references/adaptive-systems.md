@@ -1,5 +1,16 @@
 # Adaptive and Self-Healing Systems
 
+## Contents
+
+- [Core resilience loop](#core-resilience-loop)
+- [Four levels of healing](#four-levels-of-healing)
+- [The control loop](#the-control-loop)
+- [Drift detection](#drift-detection)
+- [Safe adaptation rules](#safe-adaptation-rules)
+- [Learning loop](#learning-loop)
+- [Domain examples](#domain-examples)
+- [Relationship to fitness checks](#relationship-to-fitness-checks)
+
 A well-designed system should not only work at launch. It should be able to detect degradation, contain failure, recover, learn from operation, and adapt safely when conditions change.
 
 Use **self-healing** carefully. It does not mean unrestricted autonomous change. It means designing explicit sensing, diagnosis, response, recovery, learning, and governance loops proportionate to the system's risk.

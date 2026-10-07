@@ -1,5 +1,13 @@
 # Build Layer — From System Design to Implementable Process
 
+## Contents
+
+- [Three layers](#three-layers)
+- [Buildable process-step contract](#buildable-process-step-contract)
+- [Process granularity rule](#process-granularity-rule)
+- [Process graph](#process-graph)
+- [Build pack](#build-pack)
+
 A system map explains structure. A build layer makes the system implementable.
 
 For every material process or capability, decompose the design into **buildable process steps**. The implementation team should be able to build, configure, automate, document, or operate the system from these specifications without reverse-engineering intent from a diagram.

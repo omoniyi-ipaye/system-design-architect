@@ -9,6 +9,39 @@ ROOT = Path(__file__).resolve().parents[1]
 SKILL = ROOT / "SKILL.md"
 errors = []
 
+
+def validate_contents(path: Path, label: str) -> None:
+    lines = path.read_text(encoding="utf-8").splitlines()
+    contents_index = next(
+        (i for i, line in enumerate(lines[:25]) if re.fullmatch(r"##\s+(?:Table of )?Contents\s*", line, re.I)),
+        None,
+    )
+    if contents_index is None:
+        errors.append(f"{label} exceeds 100 lines but has no contents list near the top")
+        return
+
+    toc_end = next(
+        (i for i in range(contents_index + 1, len(lines)) if re.match(r"^#{1,2}\s+", lines[i])),
+        len(lines),
+    )
+    targets = set(re.findall(r"^\s*[-*]\s+\[[^\]]+\]\(#([^)]+)\)", "\n".join(lines[contents_index + 1:toc_end]), re.M))
+
+    def anchor(value: str) -> str:
+        value = value.strip().lower().replace("`", "")
+        value = re.sub(r"[^\w\- ]", "", value)
+        return re.sub(r"[\s-]+", "-", value).strip("-")
+
+    missing = []
+    for line in lines[toc_end:]:
+        heading = re.match(r"^(#{1,2})\s+(.+?)\s*#*\s*$", line)
+        if not heading:
+            continue
+        title = heading.group(2).strip()
+        if title.lower() != "contents" and anchor(title) not in targets:
+            missing.append(title)
+    if missing:
+        errors.append(f"{label} contents list is missing sections: {', '.join(missing)}")
+
 if not SKILL.exists():
     errors.append("SKILL.md is missing")
 else:
@@ -39,6 +72,12 @@ else:
             errors.append("metadata version is required")
     if len(text.splitlines()) > 500:
         errors.append("SKILL.md exceeds recommended 500 lines")
+    if len(text.splitlines()) > 100:
+        validate_contents(SKILL, "SKILL.md")
+
+for reference in sorted((ROOT / "references").glob("*.md")):
+    if len(reference.read_text(encoding="utf-8").splitlines()) > 100:
+        validate_contents(reference, str(reference.relative_to(ROOT)))
 
 required = [
     "references/daily-use.md",

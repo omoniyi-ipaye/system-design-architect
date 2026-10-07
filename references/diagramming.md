@@ -1,5 +1,13 @@
 # System Visualization and Diagramming Guidance
 
+## Contents
+
+- [Choose the view by the question](#choose-the-view-by-the-question)
+- [Software-specific views](#software-specific-views)
+- [Visual layering](#visual-layering)
+- [Evidence and state](#evidence-and-state)
+- [Diagram quality checklist](#diagram-quality-checklist)
+
 Visual models are first-class system-design artifacts. Use them to expose structure, flow, causality, state, responsibility, risk, and change.
 
 Read `references/visual-first.md` for the default visual-first response protocol.
