@@ -73,7 +73,6 @@ required = [
     "evals/evals.json",
     "evals/visual-daily-evals.json",
     "LICENSE",
-    "SECURITY.md",
     "CHANGELOG.md",
 ]
 for rel in required:

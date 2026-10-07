@@ -5,7 +5,7 @@ license: Apache-2.0
 compatibility: Works with Agent Skills-compatible coding agents and general-purpose AI assistants that can read Markdown; repository/file inspection, operational evidence, metrics, structured-file creation, and diagram capabilities improve daily use.
 metadata:
   author: Omoniyi Ipaye
-  version: "2.3.0"
+  version: "2.4.0"
   methodology: "Visual-first model-driven systems design + granular build specification + systems thinking + systems engineering + process/service design + adaptive resilience + C4/SDR + AI risk/evals"
 ---
 
@@ -25,15 +25,16 @@ Your objective is the **simplest system that reliably creates the intended outco
 4. **Build to implementable granularity.** A request to build/design a serious system is incomplete if it stops at architecture boxes or a process map. Decompose material target processes into buildable steps using `references/build-layer.md`.
 5. **Evidence first for existing systems.** Reconstruct AS-IS from evidence before proposing TARGET. Separate **Observed / Assumed / Unknown / Proposed**.
 6. **Keep stages separate.** Never silently mix AS-IS, TRANSITION, and TARGET.
-7. **Outcome before activity.** A completed workflow is not necessarily a successful system. Distinguish verification from validation.
-8. **Whole-system over local optimization.** Check whether a local improvement damages the end-to-end outcome.
-9. **Least justified complexity.** Challenge unnecessary technology, automation, approvals, handoffs, agents, infrastructure, and ceremony.
-10. **Dependencies are fallible.** Design detection, containment, fallback, recovery, reconciliation, escalation, and learning proportionately.
-11. **Controls must be real.** Critical policy, authorization, safety, quality, and decision boundaries must be enforceable.
-12. **Self-healing is bounded.** Automatic recovery may restore operation only inside a pre-approved adaptation envelope. Never silently redefine purpose, critical policy, authority, safety boundaries, or source-of-truth rules.
-13. **Structural adaptation re-enters design.** Significant change must be designed, verified, validated, and governed before broad rollout.
-14. **Do not over-interrogate.** Ask only questions that materially affect boundaries, safety, authority, source of truth, major cost, or irreversible decisions. Otherwise label assumptions and continue.
-15. **Keep artifacts synchronized.** Do not manually maintain contradictory context, process, build, risk, health, and target artifacts when they can be generated or traced from the canonical model.
+7. **Make health evidence operational.** For System Health mode, identify source, timestamp, baseline, freshness, threshold, and privacy limits before diagnosis. Use `references/operational-evidence.md`.
+8. **Outcome before activity.** A completed workflow is not necessarily a successful system. Distinguish verification from validation.
+9. **Whole-system over local optimization.** Check whether a local improvement damages the end-to-end outcome.
+10. **Least justified complexity.** Challenge unnecessary technology, automation, approvals, handoffs, agents, infrastructure, and ceremony.
+11. **Dependencies are fallible.** Design detection, containment, fallback, recovery, reconciliation, escalation, and learning proportionately.
+12. **Controls must be real.** Critical policy, authorization, safety, quality, and decision boundaries must be enforceable.
+13. **Self-healing is bounded.** Automatic recovery may restore operation only inside a pre-approved adaptation envelope. Never silently redefine purpose, critical policy, authority, safety boundaries, or source-of-truth rules.
+14. **Structural adaptation re-enters design.** Significant change must be designed, verified, validated, and governed before broad rollout.
+15. **Do not over-interrogate.** Ask only questions that materially affect boundaries, safety, authority, source of truth, major cost, or irreversible decisions. Otherwise label assumptions and continue.
+16. **Keep artifacts synchronized.** Do not manually maintain contradictory context, process, build, risk, health, and target artifacts when they can be generated or traced from the canonical model.
 
 # Choose the engagement
 
@@ -75,10 +76,11 @@ For non-trivial engagements, when the environment supports structured files/stat
 3. Mark structural elements/flows as AS-IS, TRANSITION, TARGET, or shared and Observed/Assumed/Unknown/Proposed where applicable.
 4. Add typed flows, handoff contracts, state/resources, capacity/queues, risks/controls/recovery, fitness checks, health signals, recovery actions, and adaptation envelope.
 5. For a build request, add `process_steps` to the canonical model until the target system is implementable.
-6. Validate with `python scripts/validate_model.py system.json`.
-7. Render synchronized views/build tables with `python scripts/render_system.py system.json`.
+6. Validate with `python3 scripts/validate_model.py system.json`.
+7. Render synchronized views/build tables with `python3 scripts/render_system.py system.json`.
 8. Treat rendered artifacts as representations of the model, not independent sources of truth.
 9. Keep narrative/SDRs for rationale; keep structural/process truth in the model.
+10. In Mode D, collect aggregate evidence through a read-only adapter, preserve source timestamps and historical baselines, and apply explicit freshness limits and thresholds. Keep observations separate from diagnosis and response authority.
 
 If the host cannot create structured files, maintain the same conceptual model in-session.
 
@@ -227,6 +229,8 @@ Show affected AS-IS slice → requested change → affected states/decisions/int
 
 **Desired outcome → current signals → health/drift view → diagnosis → containment/recovery → verify recovery → smallest adaptation → changed build steps if structural → monitor/learn**.
 
+For live or replayed operational evidence, use `references/operational-evidence.md`. Evidence collection is read-only. A threshold can trigger review but does not authorize action. Label diagnosis as inference, cite supporting observations, and keep each response behind the named human authority unless a separately approved adaptation envelope says otherwise.
+
 # Verification and validation
 
 Always distinguish:
@@ -333,6 +337,7 @@ Use these for depth:
 - `references/architecture-fitness.md`
 - `references/reliability.md`
 - `references/adaptive-systems.md`
+- `references/operational-evidence.md`
 - `references/security.md`
 - `references/data-systems.md`
 - `references/ai-systems.md`

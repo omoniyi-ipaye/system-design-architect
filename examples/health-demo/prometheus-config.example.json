@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "system": {
+    "id": "checkout-service",
+    "name": "Checkout service health",
+    "intended_outcome": "Customers can complete checkout within the agreed availability and latency targets."
+  },
+  "sources": [
+    {
+      "id": "prometheus-primary",
+      "adapter": "prometheus",
+      "endpoint": "https://prometheus.example.com",
+      "auth_env": {
+        "variable": "PROMETHEUS_BEARER_TOKEN",
+        "header": "Authorization",
+        "prefix": "Bearer "
+      },
+      "current_window_seconds": 3600,
+      "baseline_window_seconds": 604800,
+      "step_seconds": 300,
+      "signals": [
+        {
+          "id": "checkout_server_error_rate",
+          "name": "Checkout server error rate",
+          "unit": "%",
+          "query": "100 * sum(rate(http_requests_total{service=\"checkout\",status=~\"5..\"}[5m])) / sum(rate(http_requests_total{service=\"checkout\"}[5m]))",
+          "current_statistic": "mean",
+          "baseline_statistic": "median",
+          "max_age_seconds": 600,
+          "threshold": {"op": "lte", "value": 1}
+        }
+      ]
+    }
+  ],
+  "diagnosis_rules": []
+}

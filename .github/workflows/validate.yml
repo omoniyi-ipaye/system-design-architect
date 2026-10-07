@@ -61,13 +61,17 @@ jobs:
               'SKILL.md', 'LICENSE', 'CHANGELOG.md',
               'references/visual-first.md', 'references/daily-use.md',
               'references/build-layer.md', 'references/canonical-model.md',
-              'references/adaptive-systems.md', 'references/review-matrix.md',
+              'references/adaptive-systems.md', 'references/operational-evidence.md', 'references/review-matrix.md',
               'templates/SYSTEM_VIEW_PACK.md', 'templates/SYSTEM_HEALTH.md',
               'templates/ADAPTIVE_OPERATING_LOOP.md',
-              'model/system.schema.json', 'model/system.example.json',
-              'scripts/render_system.py', 'scripts/validate_model.py',
+              'model/system.schema.json', 'model/system.example.json', 'model/operational-evidence.schema.json', 'model/README.md',
+              'scripts/render_system.py', 'scripts/validate_model.py', 'scripts/validate_skill.py', 'scripts/collect_evidence.py', 'scripts/run_evals.py',
+              'scripts/eval_adapters/ollama.py',
               'examples/non-software-employee-onboarding-system.md',
-              'evals/evals.json', 'evals/visual-daily-evals.json',
+              'examples/health-demo/config.json', 'examples/health-demo/sample-payload.json',
+              'examples/health-demo/prometheus-config.example.json',
+              'examples/health-demo/run_demo.py', 'examples/health-demo/linkedin-draft.md',
+              'evals/evals.json', 'evals/visual-daily-evals.json', 'evals/README.md',
           ]
           for d in required_dirs:
               if not (bundle / d).is_dir():
@@ -85,8 +89,25 @@ jobs:
           if manifest.get('skills') != './skills/':
               raise SystemExit('plugin manifest must point to bundled skills')
 
-          if not filecmp.cmp('SKILL.md', bundle / 'SKILL.md', shallow=False):
-              raise SystemExit('bundled SKILL.md has drifted from root SKILL.md')
+          synchronized_files = [
+              ('SKILL.md', 'SKILL.md'),
+              ('CHANGELOG.md', 'CHANGELOG.md'),
+              ('references/operational-evidence.md', 'references/operational-evidence.md'),
+              ('model/operational-evidence.schema.json', 'model/operational-evidence.schema.json'),
+              ('model/README.md', 'model/README.md'),
+              ('scripts/collect_evidence.py', 'scripts/collect_evidence.py'),
+              ('scripts/run_evals.py', 'scripts/run_evals.py'),
+              ('scripts/eval_adapters/ollama.py', 'scripts/eval_adapters/ollama.py'),
+              ('evals/README.md', 'evals/README.md'),
+              ('examples/health-demo/config.json', 'examples/health-demo/config.json'),
+              ('examples/health-demo/sample-payload.json', 'examples/health-demo/sample-payload.json'),
+              ('examples/health-demo/prometheus-config.example.json', 'examples/health-demo/prometheus-config.example.json'),
+              ('examples/health-demo/run_demo.py', 'examples/health-demo/run_demo.py'),
+              ('examples/health-demo/linkedin-draft.md', 'examples/health-demo/linkedin-draft.md'),
+          ]
+          for source, target in synchronized_files:
+              if not filecmp.cmp(source, bundle / target, shallow=False):
+                  raise SystemExit(f'plugin bundle drifted: {source} != {target}')
 
           print('Full skill plugin bundle is complete and MCP-independent.')
           PY
@@ -95,6 +116,10 @@ jobs:
         run: |
           python -m json.tool evals/evals.json >/dev/null
           python -m json.tool evals/visual-daily-evals.json >/dev/null
+          python -m json.tool model/operational-evidence.schema.json >/dev/null
+          python -m json.tool examples/health-demo/config.json >/dev/null
+          python -m json.tool examples/health-demo/sample-payload.json >/dev/null
+          python -m json.tool examples/health-demo/prometheus-config.example.json >/dev/null
           python -m json.tool plugin/.codex-plugin/plugin.json >/dev/null
           python -m json.tool app/.mcp.json >/dev/null
           python -m json.tool app/package.json >/dev/null
