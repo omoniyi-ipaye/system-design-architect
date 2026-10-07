@@ -6,6 +6,7 @@ This directory contains the structural source-of-truth format for System Design 
 
 - `system.schema.json` — JSON Schema for the canonical model.
 - `system.example.json` — worked employee-onboarding example with AS-IS, TARGET, risks, verification, health, recovery, and adaptation.
+- `operational-evidence.schema.json` — normalized contract for timestamped observations, baselines, freshness/threshold checks, inferred diagnoses, and human-authorized response plans.
 
 The model is designed to be domain-neutral. Elements may be people, teams, processes, services, systems, devices, resources, queues, controls, states, or data stores.
 
@@ -28,15 +29,17 @@ Flows remain stage-aware so current behavior and target behavior do not silently
 ## Validate
 
 ```bash
-python scripts/validate_model.py model/system.example.json
+python3 scripts/validate_model.py model/system.example.json
 ```
 
 ## Render
 
 ```bash
-python scripts/render_system.py model/system.example.json
+python3 scripts/render_system.py model/system.example.json
 ```
 
 The renderer creates a portable self-contained HTML report from the same model, including synchronized stage maps, transition path, capacity, risks/recovery, verification/validation, health signals, and adaptive operating loop.
 
 See `references/canonical-model.md` for how an agent should create and maintain the model during daily work.
+
+For System Health source adapters and report generation, see `references/operational-evidence.md`.

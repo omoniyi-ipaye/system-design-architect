@@ -1,5 +1,16 @@
 # Canonical System Model
 
+## Contents
+
+- [Why it exists](#why-it-exists)
+- [Files](#files)
+- [Model invariants](#model-invariants)
+- [Daily workflow](#daily-workflow)
+- [Validation](#validation)
+- [Rendering](#rendering)
+- [Evidence discipline](#evidence-discipline)
+- [Relationship to prose artifacts](#relationship-to-prose-artifacts)
+
 The canonical system model is the machine-readable source of truth for a System Design Architect engagement.
 
 Use it for non-trivial systems whenever the working environment can create files or maintain structured state.

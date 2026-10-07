@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.4.0 - Unreleased
+- Add a provider-neutral behavioral evaluation runner with command adapters for agents and judges, quote-checked assertion evidence, failure reports, and version-to-version regression comparisons.
+- Add read-only operational evidence adapters for JSON files, HTTP JSON APIs, and Prometheus-compatible metrics.
+- Define a normalized evidence report contract with freshness, current-vs-baseline comparisons, explicit thresholds, separate observed and inferred states, and human-authorized bounded response plans.
+- Add a synthetic employee-onboarding health demo and a LinkedIn walkthrough pack.
+- Update the System Health workflow to require source, timestamp, baseline, freshness, threshold, and privacy boundaries before diagnosis.
+
 ## 2.3.0 - 2026-09-05
 - Add a mandatory **build layer** between high-level system design and implementation.
 - Add `references/build-layer.md` with granular process-step decomposition rules and a build-pack definition.

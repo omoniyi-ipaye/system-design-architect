@@ -4,9 +4,9 @@ A vendor-neutral **Agent Skill** for designing, reviewing, operating, and evolvi
 
 A system can be software, an AI agent, a business process, an operating model, a customer service, a smart environment, a supply chain, a learning system, a physical operation, or another network of interacting elements organized around an outcome.
 
-## What changed in v2.2
+## Current capabilities
 
-For non-trivial engagements, System Design Architect can now maintain a canonical machine-readable `system.json` and generate synchronized visual views from that one source of truth.
+For non-trivial engagements, System Design Architect maintains a canonical machine-readable `system.json` and generates synchronized visual views from that one source of truth. The current unreleased 2.4.0 work adds executable behavioral evaluations and read-only operational evidence adapters for System Health.
 
 ```text
 Evidence / user input / operational data
@@ -38,16 +38,24 @@ This prevents the context map, flow map, target design, risk analysis, fitness c
 Validate a model:
 
 ```bash
-python scripts/validate_model.py model/system.example.json
+python3 scripts/validate_model.py model/system.example.json
 ```
 
 Render synchronized visual views:
 
 ```bash
-python scripts/render_system.py model/system.example.json
+python3 scripts/render_system.py model/system.example.json
 ```
 
 The renderer creates a self-contained HTML visual report.
+
+Run the operational health demo:
+
+```bash
+python3 examples/health-demo/run_demo.py
+```
+
+It serves aggregate synthetic onboarding signals through a local HTTP endpoint and writes a normalized JSON evidence report plus a self-contained HTML health view to `demo-output/`. See [`references/operational-evidence.md`](references/operational-evidence.md) for adapters and configuration, and [`examples/health-demo/linkedin-draft.md`](examples/health-demo/linkedin-draft.md) for the walkthrough and post draft.
 
 ## Core behavior
 
@@ -165,26 +173,31 @@ See [`references/teaching-mode.md`](references/teaching-mode.md).
 ## Validation
 
 ```bash
-python scripts/validate_skill.py
-python scripts/validate_model.py model/system.example.json
-python scripts/render_system.py model/system.example.json
+python3 scripts/validate_skill.py
+python3 scripts/validate_model.py model/system.example.json
+python3 scripts/render_system.py model/system.example.json
+python3 scripts/run_evals.py --check
 ```
 
-CI runs project validation, canonical-model validation, a renderer smoke test, the official Agent Skills reference validator, and JSON validation for the behavioral eval suites.
+The repository workflow validates the skill and model, builds the optional app, and runs the renderer and bundle checks. Model-backed eval runs require a configured agent command and judge command; the repository does not embed provider credentials or a model SDK.
 
 ## Evals
 
 - [`evals/evals.json`](evals/evals.json) — systems-design and safety behavior.
 - [`evals/visual-daily-evals.json`](evals/visual-daily-evals.json) — visual-first and daily-use behavior.
+- [`scripts/run_evals.py`](scripts/run_evals.py) — command-adapter runner with evidence-checked scoring and baseline comparisons.
+- [`scripts/eval_adapters/ollama.py`](scripts/eval_adapters/ollama.py) — optional adapter for local Ollama agent and judge models.
+- [`evals/README.md`](evals/README.md) — agent/judge adapter contract and usage.
 
-## Current roadmap
+## Next work
 
-The next major work is intentionally not more methodology prose:
+The first executable eval harness and generic read-only evidence adapters are now implemented. The next meaningful work depends on representative live systems and model runtimes:
 
-1. executable model/agent behavioral eval harness;
-2. live operational evidence adapters for System Health and bounded self-healing.
+1. add provider-specific adapters where teams need them;
+2. run the behavioral suite across selected agents and establish reviewable baselines;
+3. validate System Health mappings against real, privacy-reviewed aggregate data.
 
-See the open GitHub issues.
+These integrations require system-owner decisions about permitted evidence, freshness, thresholds, and action authority.
 
 ## License
 

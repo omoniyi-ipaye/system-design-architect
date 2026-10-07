@@ -1,0 +1,62 @@
+{
+  "schema_version": "1.0",
+  "system": {
+    "id": "employee-onboarding",
+    "name": "Employee onboarding readiness",
+    "intended_outcome": "New hires can begin productive work on their first day with the required access and equipment.",
+    "data_classification": "Synthetic demonstration data"
+  },
+  "sources": [
+    {
+      "id": "onboarding-operations-api",
+      "adapter": "http_json",
+      "endpoint": "http://127.0.0.1:8899/api/health",
+      "timeout_seconds": 5,
+      "generated_at_path": "generated_at",
+      "signals": [
+        {
+          "id": "day1_readiness",
+          "name": "Day 1 readiness",
+          "unit": "%",
+          "current_path": "signals.day1_readiness.current",
+          "baseline_path": "signals.day1_readiness.baseline",
+          "baseline_window": "previous 30 days",
+          "max_age_seconds": 3600,
+          "threshold": {"op": "gte", "value": 95}
+        },
+        {
+          "id": "late_manager_inputs",
+          "name": "Manager inputs submitted late",
+          "unit": "%",
+          "current_path": "signals.late_manager_inputs.current",
+          "baseline_path": "signals.late_manager_inputs.baseline",
+          "baseline_window": "previous 30 days",
+          "max_age_seconds": 3600,
+          "threshold": {"op": "lte", "value": 10}
+        }
+      ]
+    }
+  ],
+  "diagnosis_rules": [
+    {
+      "id": "readiness-and-handoff-risk",
+      "when": [
+        {"signal_id": "day1_readiness", "status": "breach"},
+        {"signal_id": "late_manager_inputs", "status": "breach"}
+      ],
+      "title": "Readiness risk coincides with late manager inputs",
+      "classification": "handoff_and_outcome_risk",
+      "claim": "In this sample, Day 1 readiness is below target while late manager inputs are above threshold. This is a lead for investigation, not proof that one caused the other.",
+      "confidence": "low",
+      "limitations": "The sample is synthetic and aggregate. It cannot establish causality or identify affected employees.",
+      "response": {
+        "action": "Have People Ops review overdue onboarding cases and ask managers to confirm missing setup details; use the existing exception process for this cohort.",
+        "authority": "People Ops lead approves any case routing; managers confirm their own submissions.",
+        "reversible": true,
+        "max_blast_radius": "The affected onboarding cohort for the next start date",
+        "verification": "Re-query the two signals and confirm Day 1 readiness returns to at least 95% after the missing details are resolved.",
+        "escalation": "Escalate if source freshness fails, records conflict, or a proposed change would alter policy or decision rights."
+      }
+    }
+  ]
+}

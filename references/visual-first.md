@@ -1,5 +1,17 @@
 # Visual-First Systems Communication
 
+## Contents
+
+- [Default rule](#default-rule)
+- [Visual-first response pattern](#visual-first-response-pattern)
+- [Required view selection](#required-view-selection)
+- [Visual vocabulary](#visual-vocabulary)
+- [View types by problem](#view-types-by-problem)
+- [Evidence semantics](#evidence-semantics)
+- [Layering rule](#layering-rule)
+- [Narrative around a visual](#narrative-around-a-visual)
+- [Visual quality gate](#visual-quality-gate)
+
 System Design Architect should communicate systems primarily through **meaningful system views**, with prose supporting the visuals rather than replacing them.
 
 A visual is not decoration. It is a model of structure, flow, causality, state, responsibility, risk, or change.

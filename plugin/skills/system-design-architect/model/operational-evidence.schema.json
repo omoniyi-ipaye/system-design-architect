@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/omoniyi-ipaye/system-design-architect/model/operational-evidence.schema.json",
+  "title": "System Design Architect Operational Evidence Report",
+  "type": "object",
+  "required": ["schema_version", "system", "collected_at", "status", "observations", "baselines", "checks", "diagnoses", "response_plan", "actions_executed", "authority_boundary"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "system": {"type": "object", "required": ["id", "name", "intended_outcome"], "properties": {"id": {"type": "string"}, "name": {"type": "string"}, "intended_outcome": {"type": "string"}}},
+    "collected_at": {"type": "string", "format": "date-time"},
+    "status": {"enum": ["healthy", "attention", "insufficient_evidence"]},
+    "sources": {"type": "array", "items": {"type": "object", "required": ["id", "adapter", "status"], "properties": {"id": {"type": "string"}, "adapter": {"type": "string"}, "status": {"enum": ["collected", "unavailable"]}}}},
+    "source_errors": {"type": "array", "items": {"type": "object", "required": ["source_id", "adapter", "message"], "properties": {"source_id": {"type": "string"}, "adapter": {"type": "string"}, "message": {"type": "string"}}}},
+    "observations": {"type": "array", "items": {"$ref": "#/$defs/observation"}},
+    "baselines": {"type": "array", "items": {"$ref": "#/$defs/baseline"}},
+    "checks": {"type": "array", "items": {"$ref": "#/$defs/check"}},
+    "diagnoses": {"type": "array", "items": {"$ref": "#/$defs/diagnosis"}},
+    "response_plan": {"type": "array", "items": {"$ref": "#/$defs/response"}},
+    "actions_executed": {"type": "array", "maxItems": 0},
+    "authority_boundary": {"type": "string"}
+  },
+  "$defs": {
+    "source": {"type": "object", "required": ["id", "adapter"], "properties": {"id": {"type": "string"}, "adapter": {"type": "string"}}},
+    "observation": {"type": "object", "required": ["id", "signal_id", "name", "value", "unit", "observed_at", "timestamp_source", "evidence_state", "source"], "properties": {"id": {"type": "string"}, "signal_id": {"type": "string"}, "name": {"type": "string"}, "value": {"type": ["string", "number", "boolean"]}, "unit": {"type": "string"}, "observed_at": {"type": "string", "format": "date-time"}, "timestamp_source": {"enum": ["source", "prometheus_sample", "collector"]}, "window": {"type": ["string", "null"]}, "evidence_state": {"const": "observed"}, "source": {"$ref": "#/$defs/source"}}},
+    "baseline": {"type": "object", "required": ["id", "signal_id", "value", "unit", "evidence_state", "source"], "properties": {"id": {"type": "string"}, "signal_id": {"type": "string"}, "value": {"type": ["string", "number", "boolean"]}, "unit": {"type": "string"}, "window": {"type": ["string", "null"]}, "sample_count": {"type": ["integer", "null"]}, "statistic": {"type": "string"}, "evidence_state": {"const": "observed"}, "source": {"$ref": "#/$defs/source"}}},
+    "check": {"type": "object", "required": ["signal_id", "name", "status", "freshness", "source_id", "adapter"], "properties": {"signal_id": {"type": "string"}, "name": {"type": "string"}, "status": {"enum": ["ok", "breach", "stale", "unavailable", "monitored"]}, "freshness": {"enum": ["fresh", "stale", "unavailable"]}, "observed_value": {"type": ["string", "number", "boolean"]}, "baseline_value": {"type": ["string", "number", "boolean", "null"]}, "threshold": {"type": ["object", "null"]}, "source_id": {"type": "string"}, "adapter": {"type": "string"}}},
+    "diagnosis": {"type": "object", "required": ["id", "title", "classification", "claim", "evidence_state", "confidence", "supporting_evidence", "limitations"], "properties": {"id": {"type": "string"}, "title": {"type": "string"}, "classification": {"type": "string"}, "claim": {"type": "string"}, "evidence_state": {"const": "inferred"}, "confidence": {"enum": ["low", "medium", "high"]}, "supporting_evidence": {"type": "array"}, "limitations": {"type": "string"}}},
+    "response": {"type": "object", "required": ["id", "diagnosis_id", "action", "authority", "authorization_required", "auto_execute", "reversible", "max_blast_radius", "verification", "escalation"], "properties": {"id": {"type": "string"}, "diagnosis_id": {"type": "string"}, "action": {"type": "string"}, "authority": {"type": "string"}, "authorization_required": {"const": true}, "auto_execute": {"const": false}, "reversible": {"type": "boolean"}, "max_blast_radius": {"type": "string"}, "verification": {"type": "string"}, "escalation": {"type": "string"}}}
+  }
+}

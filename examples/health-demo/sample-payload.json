@@ -1,0 +1,7 @@
+{
+  "generated_at": "runtime-generated-by-run_demo.py",
+  "signals": {
+    "day1_readiness": {"current": 82, "baseline": 97},
+    "late_manager_inputs": {"current": 24, "baseline": 7}
+  }
+}
